@@ -1,0 +1,7 @@
+{
+  "name": "check-my-day",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
