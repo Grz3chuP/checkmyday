@@ -15,7 +15,11 @@ getJobList()
   <section>
 
     <JobAdd/>
-    {{todayPay}}
+    <div class="todayTotalPay">
+      {{todayPay}}
+
+    </div>
+
     <JobToday/>
   </section>
 
@@ -30,5 +34,15 @@ section {
 
   background-color: #ffffff;
   margin: 10px;
+}
+.todayTotalPay {
+ width: max-content;
+  padding: 5px;
+  border: rgba(13, 13, 13, 0.4) 1px solid;
+  border-radius: 5px;
+  box-shadow: grey 2px 4px 6px 0;
+  background-color: beige;
+  font-size: 1.5rem;
+  color: #007c08
 }
 </style>

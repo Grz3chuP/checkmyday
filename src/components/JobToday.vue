@@ -1,22 +1,27 @@
 <script setup lang="ts">
 
-import {jobList} from "../store";
+import {getJobList, jobList} from "../store";
 import {computed, ref} from "vue";
+import {deleteJobItemFromFireStore} from "@/firestore";
 
 const today = ref(new Date().getDate())
 
 const todayJobs = computed(() => {
 
  return jobList.value.filter(job =>new Date(job.date).getDate() === today.value)
-
-
 });
 
+function deleteJob(job: any) {
+
+  deleteJobItemFromFireStore(job, 'joblist');
+  getJobList()
+}
 </script>
 
 <template>
   <div class="todayJobsWrapper">
     <div class="todayJobs" v-for="job in todayJobs">
+      <div class="removeJobButton" @click="deleteJob(job)">X</div>
       <div> {{job.name}}</div>
       <div>{{job.pay}}</div>
       <div>{{new Date(job.date).toLocaleDateString('en-GB', {
@@ -44,16 +49,34 @@ const todayJobs = computed(() => {
   margin: 10px;
 }
 .todayJobs {
+  position: relative;
  background-color: beige;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 5px;
+  gap: 3px;
   box-shadow:  grey 2px 4px 6px 0;
   border-radius: 5px;
   border:  rgba(13, 13, 13, 0.4) 1px solid;
+  padding: 5px;
 }
+.removeJobButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #ff0000;
+  border-radius: 5px;
+  border-left:  rgba(13, 13, 13, 0.4) 1px solid;
+  border-bottom:  rgba(13, 13, 13, 0.4) 1px solid;
 
-
+  background-color: #ececb5;
+}
+.removeJobButton:hover {
+  background-color: #ff0000;
+  color: #ffffff;
+}
 </style>
