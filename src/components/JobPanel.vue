@@ -1,12 +1,11 @@
 <script setup lang="ts">
 
-import {jobList} from "../store";
+import {getJobList, jobList, todayPay} from "../store";
 import {getJobListFromFireStoreOrEmptyArray} from "@/firestore";
 import JobAdd from "@/components/JobAdd.vue";
+import JobToday from "@/components/JobToday.vue";
 
-async function getJobList() {
-  jobList.value = await getJobListFromFireStoreOrEmptyArray('joblist');
-}
+
 getJobList()
 
 
@@ -14,10 +13,10 @@ getJobList()
 
 <template>
   <section>
-    <H1>
-      DB test: {{jobList}}
-    </H1>
+
     <JobAdd/>
+    {{todayPay}}
+    <JobToday/>
   </section>
 
 </template>
@@ -28,7 +27,8 @@ section {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100vh;
+
   background-color: #ffffff;
+  margin: 10px;
 }
 </style>

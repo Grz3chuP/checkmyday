@@ -1,13 +1,9 @@
 <script setup lang="ts">
-
-
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import { IonButton, IonInput, IonItem, IonLabel, IonRange, IonIcon } from '@ionic/vue';
 import {cash, cashOutline} from "ionicons/icons";
 import {addJobItemToFireStore} from "@/firestore";
-
-
-
+import {getJobList} from "@/store";
 
 async function addjob() {
   const t = new Date().getTime();
@@ -18,11 +14,10 @@ async function addjob() {
   }
   lastJob.value = newJob;
   await addJobItemToFireStore(newJob, 'joblist')
-
+getJobList()
   jobName.value = '';
   pay.value = 40;
 }
-
 
 const lastJob = ref('');
 const jobName = ref('');
@@ -31,7 +26,16 @@ const jobTime = ref('');
 const jobPay = ref(0);
 const pay = ref(40);
 
-
+const lastJobAdd = computed(() => {
+  if(!lastJob.value) {
+    return 'no job added yet'
+  }
+  return new Date(lastJob.value.date).toLocaleDateString('en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long'
+  });
+});
 
 
 </script>
@@ -60,8 +64,8 @@ const pay = ref(40);
     </ion-item>
     <ion-button @click="addjob" >Add Job</ion-button>
   </fieldset>
-  <div>
-    dodano:
+  <div class="lastJobWrapper">
+    Last Job
     <div class="lastJobName">
       {{lastJob.name}}
     </div>
@@ -69,11 +73,11 @@ const pay = ref(40);
     {{lastJob.pay}}
     </div>
     <div class="lastJobDate">
-    {{new Date(lastJob.date).getDay()+1 }}{{new Date(lastJob.date).getMonth() +1 }}{{new Date(lastJob.date).getFullYear() }}
+   {{lastJobAdd}}
     </div>
 
   </div>
-{{new Date(lastJob.date)}}
+
 
 </section>
 
@@ -111,5 +115,17 @@ ion-range {
 fieldset {
   box-shadow: grey 2px 4px 6px 0;
   border: rgba(13, 13, 13, 0.4) 1px solid;
+}
+.lastJobWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  padding: 10px;
+  border: rgba(13, 13, 13, 0.4) 1px solid;
+  border-radius: 5px;
+  box-shadow: grey 2px 4px 6px 0;
+  background-color: beige;
 }
 </style>
