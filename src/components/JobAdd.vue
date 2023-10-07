@@ -1,0 +1,115 @@
+<script setup lang="ts">
+
+
+import {ref} from "vue";
+import { IonButton, IonInput, IonItem, IonLabel, IonRange, IonIcon } from '@ionic/vue';
+import {cash, cashOutline} from "ionicons/icons";
+import {addJobItemToFireStore} from "@/firestore";
+
+
+
+
+async function addjob() {
+  const t = new Date().getTime();
+  const newJob = {
+    name: jobName.value,
+    date: t,
+    pay: pay.value
+  }
+  lastJob.value = newJob;
+  await addJobItemToFireStore(newJob, 'joblist')
+
+  jobName.value = '';
+  pay.value = 40;
+}
+
+
+const lastJob = ref('');
+const jobName = ref('');
+const jobDate = ref('');
+const jobTime = ref('');
+const jobPay = ref(0);
+const pay = ref(40);
+
+
+
+
+</script>
+
+<template>
+<section>
+  <fieldset class="backG">
+    <ion-item color="light">
+      <ion-label position="floating">Job Name</ion-label>
+      <ion-input type="text" v-model="jobName"></ion-input>
+    </ion-item>
+    <ion-item color="light"  >
+      <ion-label class="cashLabel" position="floating">Job Pay
+      <ion-item color="light"  class="cashIconWithMoney">
+        <ion-icon :icon="cashOutline"></ion-icon>
+        {{pay}}
+      </ion-item>
+      </ion-label>
+
+    <ion-range class="randgeSlider"
+               aria-label="Custom range"
+               :pin="true"
+               :min="15"
+               :max="100"
+               v-model="pay" > {{pay}}</ion-range>
+    </ion-item>
+    <ion-button @click="addjob" >Add Job</ion-button>
+  </fieldset>
+  <div>
+    dodano:
+    <div class="lastJobName">
+      {{lastJob.name}}
+    </div>
+    <div class="lastJobPay">
+    {{lastJob.pay}}
+    </div>
+    <div class="lastJobDate">
+    {{new Date(lastJob.date).getDay()+1 }}{{new Date(lastJob.date).getMonth() +1 }}{{new Date(lastJob.date).getFullYear() }}
+    </div>
+
+  </div>
+{{new Date(lastJob.date)}}
+
+</section>
+
+</template>
+
+<style scoped>
+ion-item {
+  overflow: visible;
+}
+
+.backG {
+  background-color: beige;
+}
+ion-range {
+  --bar-background: #a2d2ff;
+  --bar-background-active: #bde0fe;
+  --bar-height: 8px;
+  --bar-border-radius: 6px;
+  --knob-background: #03650c;
+  --knob-size: 30px;
+  --pin-background: #33af0a;
+  --pin-color: #fff;
+
+}
+.randgeSlider {
+  margin: 0;
+  padding: 5px 0 0 0;
+}
+.cashLabel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+fieldset {
+  box-shadow: grey 2px 4px 6px 0;
+  border: rgba(13, 13, 13, 0.4) 1px solid;
+}
+</style>
