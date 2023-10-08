@@ -58,10 +58,8 @@ const thisWeekItems = computed(() => {
 
 function addJob(day: any) {
 
-
 //console.log(thisWeekList.date.toLocaleString({weekday: 'long'} ));
 return  thisWeekItems.value.filter(job =>  {
-
   const jobDate = DateTime.fromMillis(job.date).setLocale('en-GB');
   console.log('jobDate ' + jobDate);
   return jobDate.weekdayLong === weekDays[day];
@@ -86,9 +84,10 @@ const thisWeek = reactive({
 
 <template>
   <!--<FullCalendar :options="options"/>-->
+  <div class="refresh" @click="getJobList">Refresh</div>
   <div class="historyWrapper">
-    <div v-for="day in thisWeek" class="thisWeek">
-      <div>
+    <div v-for="day in thisWeek" class="thisWeek" >
+      <div >
         {{ day.day }}
         {{ day.jobs}}
         <div>
@@ -105,7 +104,7 @@ const thisWeek = reactive({
    {{thisWeekItems}}
 
   </div>
-
+{{addJob(6)}}
 
 </template>
 
