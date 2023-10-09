@@ -11,7 +11,7 @@ async function addJob() {
   }
   const t = new Date().getTime();
   const newJob = {
-    name: jobName.value,
+    name: jobName.value.trim(),
     date: t,
     pay: pay.value
   }
@@ -22,7 +22,7 @@ getJobList()
   pay.value = 40;
 }
 
-const lastJob = ref('');
+const lastJob = ref<any>('');
 const jobName = ref('');
 const jobDate = ref('');
 const jobTime = ref('');
