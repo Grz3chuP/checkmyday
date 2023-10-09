@@ -165,7 +165,7 @@ const weekTotalPay = computed(() => {
         </div>
         <div v-for="job in day.jobs" class="singleJob">
 
-          {{ job.name }}
+         <div style="max-width: 90px; white-space: nowrap; overflow: hidden" >{{ job.name }}</div>
           {{ job.pay }}
         </div>
         <div>
