@@ -1,7 +1,7 @@
 import {computed, ref} from "vue";
 import {getJobListFromFireStoreOrEmptyArray} from "@/firestore";
 
-
+export let nameValue = ref('');
 export let todayPay = computed(() => {
 let sum = 0;
 const todayFilter = jobList.value.filter(job => new Date(job.date).getDate() === new Date().getDate());
@@ -20,3 +20,9 @@ export async function getJobList() {
 }
 
 
+export function changeNameValue(name: string) {
+    nameValue.value = name;
+
+    return nameValue.value;
+
+}

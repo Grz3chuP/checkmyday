@@ -3,13 +3,16 @@ import {computed, ref} from "vue";
 import { IonButton, IonInput, IonItem, IonLabel, IonRange, IonIcon } from '@ionic/vue';
 import {cash, cashOutline} from "ionicons/icons";
 import {addJobItemToFireStore} from "@/firestore";
-import {getJobList} from "@/store";
+import {getJobList, nameValue} from "@/store";
 
 const nameProps = defineProps(['nameUsed']);
 
 const nameUsed = computed(() => {
+ if (!nameProps.nameUsed) {
+   return
+ }
+ jobName.value = nameProps.nameUsed;
 
- return nameProps.nameUsed;
 })
 
 
@@ -32,7 +35,7 @@ getJobList()
 }
 
 const lastJob = ref<any>('');
-const jobName = ref(nameUsed);
+const jobName = ref('');
 const jobDate = ref('');
 const jobTime = ref('');
 const jobPay = ref(0);
@@ -53,7 +56,8 @@ const lastJobAdd = computed(() => {
 </script>
 
 <template>
-
+{{nameProps.nameUsed}}
+  {{nameUsed}}
 <section>
   <fieldset class="backG">
     <ion-item color="light">

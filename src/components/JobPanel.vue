@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {getJobList, jobList, todayPay} from "../store";
+import {changeNameValue, getJobList, jobList, todayPay} from "../store";
 import {getJobListFromFireStoreOrEmptyArray} from "@/firestore";
 import JobAdd from "@/components/JobAdd.vue";
 import JobToday from "@/components/JobToday.vue";
@@ -31,7 +31,7 @@ const todayUniName = computed( () => {
   <section>
     <div class="uniNameWrapper">
     <div v-for="name in todayUniName" class="uniName">
-      <button @click="nameUsed=name">{{name}}</button>
+      <button @click="nameUsed = name">{{name}}</button>
     </div>
     </div>
 
