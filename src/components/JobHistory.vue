@@ -138,8 +138,15 @@ const weekTotalPay = computed(() => {
     <div class="weekTotal">
       <div>Week: {{showWeekStartAndEnd(firstDayOfWeek)}} - {{showWeekStartAndEnd(lastDayOfWeek)}}</div>
 
-    </div>
+    </div >
+    <div style="display: flex; align-items: center ">
+    Total:
     <div class="weekTotalPay">{{weekTotalPay}}</div>
+    </div>
+    <div style="display: flex; align-items: center ">
+      Jobs:
+      <div >{{thisWeekItems.length}}</div>
+    </div>
   </div>
 
 
