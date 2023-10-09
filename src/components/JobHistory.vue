@@ -12,15 +12,27 @@
 //   initialView: 'dayGridMonth'
 // })
 import {computed, reactive, ref} from "vue";
-import {IonIcon} from "@ionic/vue";
+import {IonIcon, IonButton} from "@ionic/vue";
 import {getJobList, jobList} from "@/store";
 import {DateTime} from "luxon";
 import {refresh} from "ionicons/icons";
+import {IDniTygodnia} from "@/Interfaces/IDniTygodnia";
 
 getJobList();
 
 const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 const thisWeekList = ref<any[]>([]);
+const minusWeek = ref([0, 604800000, 1209600000, 1814400000, 2419200000, 3024000000, 3628800000, 4233600000,4838400000, 5443200000, 6048000000 ]);
+const minusWeekNumber = ref(0);
+let firstDayOfWeek = ref<any>(0)
+let lastDayOfWeek = ref<any>(0)
+function changeWeek() {
+  if (minusWeekNumber.value < 10) {
+    minusWeekNumber.value += 1;
+  }
+
+}
+
 // const thisWeekItems = computed(() => {
 //
 //   const currentDate = new Date();
@@ -40,21 +52,35 @@ const thisWeekList = ref<any[]>([]);
 //  });
 //
 // })
+function showWeekStartAndEnd (time: any) {
+  let dayToPick = time;
+  console.log('dzien 1' +dayToPick);
+  dayToPick = new Date(dayToPick);
+  console.log('dzien 2' +dayToPick);
+  const monthToPick = dayToPick.getMonth() + 1;
+  dayToPick = dayToPick.getDate();
 
+  const finaleTime = dayToPick + '/' + monthToPick;
+  console.log('dzien 3' +dayToPick);
+  return finaleTime;
+}
 
 const thisWeekItems = computed(() => {
   const currentDate = DateTime.now();
-  let firstDayOfWeek = currentDate.startOf('week');
-  let lastDayOfWeek = currentDate.endOf('week');
-  firstDayOfWeek = firstDayOfWeek.setLocale('en-GB');
-  lastDayOfWeek = lastDayOfWeek.setLocale('en-GB');
+   firstDayOfWeek = +currentDate.startOf('week').setLocale('en-GB') - minusWeek.value[minusWeekNumber.value]  ;
+   lastDayOfWeek = +currentDate.endOf('week').setLocale('en-GB') - minusWeek.value[minusWeekNumber.value];
+
+ // firstDayOfWeek = firstDayOfWeek.setLocale('en-GB');
+ // lastDayOfWeek = lastDayOfWeek.setLocale('en-GB');
+//  firstDayOfWeek -= minusWeek.value[minusWeekNumber.value];
+//  lastDayOfWeek -= minusWeek.value[minusWeekNumber.value];
   console.log('start ' + firstDayOfWeek + firstDayOfWeek.day);
   console.log('i koniec' + lastDayOfWeek.toLocaleString({weekday: 'long'}));
   return jobList.value.filter(job => {
     const jobDate = DateTime.fromMillis(job.date).setLocale('en-GB');
 
     console.log(jobDate);
-    return jobDate >= firstDayOfWeek && jobDate <= lastDayOfWeek;
+    return +jobDate >= firstDayOfWeek && +jobDate <= lastDayOfWeek;
   });
 });
 
@@ -64,6 +90,7 @@ function addJob(day: any) {
   return thisWeekItems.value.filter(job => {
     const jobDate = DateTime.fromMillis(job.date).setLocale('en-GB');
     console.log('jobDate ' + jobDate);
+    console.log(jobDate.weekdayLong)
     return jobDate.weekdayLong === day;
   });
   console.log('nowa dzienna lista ' + day + thisWeekItems);
@@ -72,14 +99,15 @@ function addJob(day: any) {
 }
 
 
-const thisWeek = ref([
-  {day: 'Monday', jobs: null},
-  {day: 'Tuesday', jobs: null},
-  {day: 'Wednesday', jobs: null},
-  {day: 'Thursday', jobs: null},
-  {day: 'Friday', jobs: null},
-  {day: 'Saturday', jobs: null},
-  {day: 'Sunday', jobs: null},
+
+const thisWeek = ref <IDniTygodnia[]>([
+  {day: 'Monday', jobs: []},
+  {day: 'Tuesday', jobs: []},
+  {day: 'Wednesday', jobs: []},
+  {day: 'Thursday', jobs: []},
+  {day: 'Friday', jobs: []},
+  {day: 'Saturday', jobs: []},
+  {day: 'Sunday', jobs: []},
 
 ]);
 
@@ -109,11 +137,19 @@ const weekTotalPay = computed(() => {
 <template>
   <!--<FullCalendar :options="options"/>-->
   <div class="topBar">
-    <div class="refresh" @click="getJobList"><ion-icon :icon="refresh" size="large"  > </ion-icon></div>
-    <div class="weekTotal">
-      <div>Week Total:</div>
-      <div class="weekTotalPay">{{weekTotalPay}}</div>
+    <div class="buttonsWrapper" >
+      <div class="refresh" @click="getJobList"><ion-icon :icon="refresh" size="large"  > </ion-icon></div>
+      <div class="weekButtons">
+        <ion-button @click="changeWeek "> Prev Week </ion-button>
+        <ion-button @click="minusWeekNumber = 0 "> This Week</ion-button>
+      </div>
     </div>
+
+    <div class="weekTotal">
+      <div>Week: {{showWeekStartAndEnd(firstDayOfWeek)}} - {{showWeekStartAndEnd(lastDayOfWeek)}}</div>
+
+    </div>
+    <div class="weekTotalPay">{{weekTotalPay}}</div>
   </div>
 
 
@@ -149,14 +185,33 @@ const weekTotalPay = computed(() => {
     {{ thisWeekItems }}
 
   </div>
-  {{ addJob(6) }}
-  {{ thisWeek }}
+
 </template>
 
 <style scoped>
+.buttonsWrapper {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  width: 100%;
+}
+.weekButtons ion-button {
+  font-size: 0.8rem;
+  padding: 0;
+}
+
+.weekTotal{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  width: 100%;
+  background-color: #ffffff;
+  margin: 5px;
+}
 .topBar {
   display: flex;
-
+  flex-direction: column;
   align-items: center;
   gap: 5px;
   width: 100%;
@@ -165,8 +220,10 @@ const weekTotalPay = computed(() => {
 }
 .weekTotalPay {
  padding: 5px;
-  margin: 10px;
+
   font-size: 2rem;
+ width: fit-content;
+
 }
 .historyWrapper {
   display: flex;
@@ -246,5 +303,16 @@ const weekTotalPay = computed(() => {
 }
 ion-icon {
   color: #007c08;
+}
+.refresh {
+  position: absolute;
+  width: fit-content;
+  top: 0;
+  left: 0;
+  margin: 5px;
+  padding: 0;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: grey 1px 2px 4px 0;
 }
 </style>
