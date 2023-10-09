@@ -5,6 +5,15 @@ import {cash, cashOutline} from "ionicons/icons";
 import {addJobItemToFireStore} from "@/firestore";
 import {getJobList} from "@/store";
 
+const nameProps = defineProps(['nameUsed']);
+
+const nameUsed = computed(() => {
+
+ return nameProps.nameUsed;
+})
+
+
+
 async function addJob() {
   if (!jobName.value) {
     return
@@ -23,7 +32,7 @@ getJobList()
 }
 
 const lastJob = ref<any>('');
-const jobName = ref('');
+const jobName = ref(nameUsed);
 const jobDate = ref('');
 const jobTime = ref('');
 const jobPay = ref(0);
@@ -44,6 +53,7 @@ const lastJobAdd = computed(() => {
 </script>
 
 <template>
+
 <section>
   <fieldset class="backG">
     <ion-item color="light">

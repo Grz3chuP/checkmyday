@@ -18,3 +18,5 @@ export let jobList = ref<any[]>([]);
 export async function getJobList() {
     jobList.value = await getJobListFromFireStoreOrEmptyArray('joblist');
 }
+
+
