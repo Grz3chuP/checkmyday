@@ -1,22 +1,12 @@
 <script setup lang="ts">
-// dodany kalendaz ale nie dzialal za dobrze
-// import '@fullcalendar/core';
-// import FullCalendar from "@fullcalendar/vue3";
-// import dayGridPlugin from "@fullcalendar/daygrid";
-// import timeGridPlugin from "@fullcalendar/timegrid";
-// import listPlugin from "@fullcalendar/list";
-// import interactionPlugin from "@fullcalendar/interaction";
 
-// const options = reactive({
-//   plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
-//   initialView: 'dayGridMonth'
-// })
 import {computed, reactive, ref} from "vue";
 import {IonIcon, IonButton} from "@ionic/vue";
 import {getJobList, jobList} from "@/store";
 import {DateTime} from "luxon";
 import {refresh} from "ionicons/icons";
 import {IDniTygodnia} from "@/Interfaces/IDniTygodnia";
+import HistoryMonth from "@/components/HistoryMonth.vue";
 
 getJobList();
 
@@ -182,7 +172,7 @@ const weekTotalPay = computed(() => {
   </div>
   <div v-if="jobList.length">
 
-    {{ thisWeekItems }}
+    <HistoryMonth/>
 
   </div>
 

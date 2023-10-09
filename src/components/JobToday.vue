@@ -8,7 +8,13 @@ const today = ref(new Date().getDate())
 
 const todayJobs = computed(() => {
 
- return jobList.value.filter(job =>new Date(job.date).getDate() === today.value)
+ return jobList.value.filter(job => {
+   let startOfTheDay = new Date().setHours(0, 0, 0, 0);
+   let endOfTheDay = new Date().setHours(23, 59, 59, 999);
+
+   return new Date(job.date).getTime() >= startOfTheDay && new Date(job.date).getTime() <= endOfTheDay
+
+ })
 });
 
 function deleteJob(job: any) {
