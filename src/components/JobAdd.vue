@@ -56,8 +56,7 @@ const lastJobAdd = computed(() => {
 </script>
 
 <template>
-{{nameProps.nameUsed}}
-  {{nameUsed}}
+{{nameUsed}}
 <section>
   <fieldset class="backG">
     <ion-item color="light">

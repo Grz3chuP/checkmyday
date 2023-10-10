@@ -26,3 +26,7 @@ export function changeNameValue(name: string) {
     return nameValue.value;
 
 }
+
+
+//testowanie querisow
+export let testList = ref<any[]>([]);

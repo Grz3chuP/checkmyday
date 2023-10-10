@@ -2,7 +2,9 @@
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, where, onSnapshot } from 'firebase/firestore';
+import {ref} from "vue";
+import {testList} from "@/store";
 
 
 // Your web app's Firebase configuration
@@ -74,4 +76,30 @@ export async function updateJobItemFromFireStore(item: any, path: string) {
     } catch (e) {
         console.error("Error updating document: ", e);
     }
+}
+
+// testowanie query plus realtime collection
+// plus testowanie laczenia sie z baza danych
+const db = getFirestore(appFire);
+
+const colRef = collection(db, 'joblist');
+
+export let serchValue = ref('');
+
+
+    // onSnapshot(serchByName, (snapshot: any) => {
+    //     testList.value = [];
+    //     snapshot.docs.forEach((doc: any) => {
+    //         testList.value.push({...doc.data(), id: doc.id})
+    //     })
+    // });
+
+export function serchByName(name:string) {
+    let serchByName = query(colRef, where("name", "==", name));
+    getDocs(serchByName).then((querySnapshot: any) => {
+        testList.value = [];
+        querySnapshot.forEach((doc: any) => {
+            testList.value.push({...doc.data(), id: doc.id})
+        })
+    });
 }
