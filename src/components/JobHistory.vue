@@ -57,6 +57,7 @@ function showWeekStartAndEnd (time: any) {
 
 const thisWeekItems = computed(() => {
   const currentDate = DateTime.now();
+  console.log('currentDate ' + currentDate);
    firstDayOfWeek = +currentDate.startOf('week').setLocale('en-GB') - minusWeek.value[minusWeekNumber.value]  ;
    lastDayOfWeek = +currentDate.endOf('week').setLocale('en-GB') - minusWeek.value[minusWeekNumber.value];
 

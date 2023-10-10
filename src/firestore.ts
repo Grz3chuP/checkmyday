@@ -103,3 +103,16 @@ export function serchByName(name:string) {
         })
     });
 }
+
+export function searchByDate(start: any, end: any ) {
+   // let searchByDate = query(colRef, where("date", ">=", start), where("date", "<=", end));
+    let searchByDate = query(colRef, where("date", ">=", start), where("date", "<=", end));
+    getDocs(searchByDate).then((querySnapshot: any) => {
+        testList.value = [];
+        querySnapshot.forEach((doc: any) => {
+            testList.value.push({...doc.data(), id: doc.id})
+        })
+
+    })
+
+}
