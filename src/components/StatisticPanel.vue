@@ -7,9 +7,15 @@ import {ref} from "vue";
 import {IonDatetime} from "@ionic/vue";
 
 let nameToSearch = ref('');
-let startDate = ref('');
-let endDate = ref('');
+let startDate = ref<any>('');
+let endDate = ref<any>('');
 
+function searchByDateRange() {
+  const startDateInMiliseconds = new Date(startDate).getTime();
+  const endDateInMiliseconds = new Date(endDate).getTime();
+  console.log(new Date(startDate).getTime());
+  console.log(new Date(endDate).getTime());
+}
 </script>
 
 <template>
@@ -29,6 +35,9 @@ let endDate = ref('');
     </div>
   </div>
   {{startDate}}
+  {{endDate}}
+  {{new Date(startDate).getTime()}}
+  {{new Date(endDate).getTime()}}
 </template>
 
 <style scoped>

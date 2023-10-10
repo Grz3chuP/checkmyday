@@ -4,12 +4,19 @@ import {getJobListFromFireStoreOrEmptyArray} from "@/firestore";
 export let nameValue = ref('');
 export let todayPay = computed(() => {
 let sum = 0;
-const todayFilter = jobList.value.filter(job => new Date(job.date).getDate() === new Date().getDate());
+const currentDay = new Date().getTime();
+const startDay = new Date().setHours(0, 0, 0, 0);
+const endDay = new Date().setHours(23, 59, 59, 999);
+const todayFilter = jobList.value.filter(job => job.date >= startDay && job.date <= endDay);
 
-    for (let i = 0; i < todayFilter.length; i++) {
-        sum += jobList.value[i].pay;
-        console.log(jobList.value[i].pay);
-    }
+    // for (let i = 0; i < todayFilter.length; i++) {
+    //     console.log('Dzisiejcze podsumowanie' + todayFilter[i].pay);
+    //     sum += jobList.value[i].pay;
+    //     console.log(jobList.value[i].pay);
+    // }
+    todayFilter.forEach(job => {
+        sum += job.pay;
+    });
     return sum;
 });
 export let jobNumber = ref(0);
