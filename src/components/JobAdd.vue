@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import {computed, onUpdated, ref, watch} from "vue";
 import { IonButton, IonInput, IonItem, IonLabel, IonRange, IonIcon } from '@ionic/vue';
 import {cash, cashOutline} from "ionicons/icons";
 import {addJobItemToFireStore} from "@/firestore";
@@ -11,11 +11,10 @@ const nameUsed = computed(() => {
  if (!nameProps.nameUsed) {
    return
  }
+  console.log(nameProps.nameUsed);
  jobName.value = nameProps.nameUsed;
 
 })
-
-
 
 async function addJob() {
   if (!jobName.value) {

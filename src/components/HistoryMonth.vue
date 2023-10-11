@@ -26,11 +26,13 @@ const startOfTheMonth = computed(() => {
   let lastDay = currentDate.endOf('month');
    firstDayOfMonth = DateTime.local(year, month, 1, 0, 0, 0).minus({ months: Math.abs(prevMonthNumber.value)  });
    lastDayOfMonth = DateTime.local(year, month, lastDay.day, 23, 59, 59).minus({  months: Math.abs(prevMonthNumber.value)});
-  firstDayOfMonth = new DateTime(firstDayOfMonth).toMillis();
+   firstDayOfMonth = firstDayOfMonth.toMillis();
+      //new DateTime(firstDayOfMonth).toMillis();
+
   currentMonth.value = new Date(firstDayOfMonth).toLocaleDateString('en-GB', {
     month: 'long'
   });
-  lastDayOfMonth = new DateTime(lastDayOfMonth).toMillis();
+  lastDayOfMonth = lastDayOfMonth.toMillis();
   return jobList.value.filter(item => {
    // return new Date(item.date).getTime() >= firstDayOfMonth && new Date(item.date).getTime() <= lastDayOfMonth
      return item.date >= firstDayOfMonth && item.date <= lastDayOfMonth;

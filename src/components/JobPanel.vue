@@ -1,10 +1,11 @@
 <script setup lang="ts">
 
 import {changeNameValue, getJobList, jobList, todayPay} from "../store";
-import {getJobListFromFireStoreOrEmptyArray} from "@/firestore";
+import {getAuth, signInWithPopup, GoogleAuthProvider, signOut} from "firebase/auth";
 import JobAdd from "@/components/JobAdd.vue";
 import JobToday from "@/components/JobToday.vue";
 import {computed, ref} from "vue";
+import LoginPanel from "@/components/LoginPanel.vue";
 
 
 const nameUsed = ref('');
@@ -22,12 +23,27 @@ const thisDayLastJobs = computed( ()=> {
   })
 })
 
+const auth = getAuth();
+
 const todayUniName = computed( () => {
   return [...new Set(thisDayLastJobs.value.map((item: any) => item.name))];
 })
+
+const signInWithGoogle = async () => {
+  const provider = new GoogleAuthProvider();
+  await signInWithPopup(auth, provider);
+}
+
+const signOutUser = async () => {
+  await signOut(auth);
+};
+
 </script>
 
 <template>
+<!--  <button @click="signInWithGoogle">Sign in with Google</button>-->
+<!--  <button @click="signOutUser">Sign out</button>-->
+  <LoginPanel/>
   <section>
     <div class="uniNameWrapper">
     <div v-for="name in todayUniName" class="uniName">

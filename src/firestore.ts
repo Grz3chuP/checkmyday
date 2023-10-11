@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, where, onSnapshot } from 'firebase/firestore';
+import { getAuth, signInWithPopup, GoogleAuthProvider, connectAuthEmulator, signInWithEmailAndPassword } from "firebase/auth";
 import {ref} from "vue";
 import {testList} from "@/store";
 
@@ -114,5 +115,12 @@ export function searchByDate(start: any, end: any ) {
         })
 
     })
+
+}
+
+//Autoryzacja uzytkownika Logi in i Log out plus sign in with email and password
+const auth = getAuth(appFire);
+
+const loginEmailPassword = async () => {
 
 }
