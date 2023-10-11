@@ -3,7 +3,7 @@ import {computed, onUpdated, ref, watch} from "vue";
 import { IonButton, IonInput, IonItem, IonLabel, IonRange, IonIcon } from '@ionic/vue';
 import {cash, cashOutline} from "ionicons/icons";
 import {addJobItemToFireStore} from "@/firestore";
-import {getJobList, nameValue} from "@/store";
+import {getJobList, nameValue, userUid} from "@/store";
 
 const nameProps = defineProps(['nameUsed']);
 
@@ -27,7 +27,7 @@ async function addJob() {
     pay: pay.value
   }
   lastJob.value = newJob;
-  await addJobItemToFireStore(newJob, 'joblist')
+  await addJobItemToFireStore(newJob, 'users/' + userUid.value +'/joblist')
 getJobList()
   jobName.value = '';
   pay.value = 40;
@@ -76,7 +76,7 @@ const lastJobAdd = computed(() => {
                :step="5"
                :ticks="true"
                :snaps="true"
-               :min="15"
+               :min="0"
                :max="100"
 
                v-model="pay" > {{pay}}</ion-range>

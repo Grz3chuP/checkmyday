@@ -1,6 +1,8 @@
 import {computed, ref} from "vue";
 import {getJobListFromFireStoreOrEmptyArray} from "@/firestore";
 
+export let userIsLogged = ref(false);
+export const userUid = ref('');
 export let nameValue = ref('');
 export let todayPay = computed(() => {
 let sum = 0;

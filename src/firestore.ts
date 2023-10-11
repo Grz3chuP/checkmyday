@@ -2,10 +2,11 @@
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, where, onSnapshot } from 'firebase/firestore';
-import { getAuth, signInWithPopup, GoogleAuthProvider, connectAuthEmulator, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, where, onSnapshot, setDoc } from 'firebase/firestore';
+import { getAuth, signInWithPopup, GoogleAuthProvider, connectAuthEmulator, onAuthStateChanged, signOut,
+            signInWithEmailAndPassword, createUserWithEmailAndPassword , AuthErrorCodes } from "firebase/auth";
 import {ref} from "vue";
-import {testList} from "@/store";
+import {testList, userIsLogged, userUid} from "@/store";
 
 
 // Your web app's Firebase configuration
@@ -47,6 +48,18 @@ export async function addJobItemToFireStore(item: any, path: string) {
     try {
         const docRef = await addDoc(jobListCol, item);
         console.log("Document written with ID: ", docRef.id);
+        item.id = docRef.id;
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+}
+
+export async function addItemFireStoreWithCustomId(item: any, path: string, customId: string) {
+    const db = getFirestore(appFire);
+    const jobListCol = collection(db, path);
+    try {
+        const docRef = doc(db, path, customId);
+        await setDoc(docRef, item);
         item.id = docRef.id;
     } catch (e) {
         console.error("Error adding document: ", e);
@@ -121,6 +134,83 @@ export function searchByDate(start: any, end: any ) {
 //Autoryzacja uzytkownika Logi in i Log out plus sign in with email and password
 const auth = getAuth(appFire);
 
-const loginEmailPassword = async () => {
+export const loginEmailPassword = async (login:string, password:string) => {
 
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, login, password);
+        console.log(userCredential);
+        userUid.value = userCredential.user?.uid;
+    }
+    catch (error) {
+        console.log(error);
+        showLoginError(error);
+    }
+}
+
+// przechwytywanie bledow logowania
+const showLoginError = (error: any) => {
+    if (error.code === AuthErrorCodes.INVALID_EMAIL) {
+        alert('Nieprawidłowy email')
+    }
+    else {
+        alert('Error' + error.message)
+    }
+
+}
+
+//rejestrowanie uzytkownika przez email i haslo
+export const registerEmailPassword = async (login:string, password:string) => {
+
+    try {
+        const userCredential = await  createUserWithEmailAndPassword(auth, login, password);
+        const newUser = {email: userCredential.user?.email, uid: userCredential.user?.uid};
+        await addItemFireStoreWithCustomId(newUser, 'users', newUser.uid);
+
+
+        console.log(userCredential);
+    }
+    catch (error) {
+        console.log(error);
+        showLoginError(error);
+    }
+}
+//sprawdzanie czy uzytkownik jest zalogowany
+export const checkUserIsLogin = async () => {
+  onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log('zalogowany' + user.email);
+                userIsLogged.value = true;
+            } else {
+                console.log('niezalogowany');
+                userIsLogged.value = false;
+            }
+        });
+}
+checkUserIsLogin();
+
+//wylogowywanie uzytkownika
+export const logout = async () => {
+    try {
+        await signOut(auth);
+        console.log('wylogowany');
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+//logowanie przez google
+export const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+
+    try {
+        const userCredential = await signInWithPopup(auth, provider);
+        console.log(userCredential);
+    }
+    catch (error) {
+        console.log(error);
+        showLoginError(error);
+    }
 }

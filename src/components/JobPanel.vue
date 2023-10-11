@@ -9,7 +9,7 @@ import LoginPanel from "@/components/LoginPanel.vue";
 
 
 const nameUsed = ref('');
-
+const userCredentials = ref<any>('');
 
 
 getJobList()
@@ -29,20 +29,16 @@ const todayUniName = computed( () => {
   return [...new Set(thisDayLastJobs.value.map((item: any) => item.name))];
 })
 
-const signInWithGoogle = async () => {
-  const provider = new GoogleAuthProvider();
-  await signInWithPopup(auth, provider);
-}
 
-const signOutUser = async () => {
-  await signOut(auth);
-};
+
+
 
 </script>
 
 <template>
-<!--  <button @click="signInWithGoogle">Sign in with Google</button>-->
-<!--  <button @click="signOutUser">Sign out</button>-->
+
+
+
   <LoginPanel/>
   <section>
     <div class="uniNameWrapper">
@@ -69,7 +65,7 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+
 
   background-color: #ffffff;
   margin: 10px;
