@@ -14,45 +14,55 @@ const passwordToSignIn = ref('')
 </script>
 
 <template>
-<section >
-<fieldset v-if="loginOpen" class="loginWrapper">
- Login
-  <div class="loginInputWrapper">
-  <ion-item color="light">
-    <ion-label position="floating">Email</ion-label>
-    <ion-input type="text" v-model="login" ></ion-input>
-  </ion-item>
-    <ion-item color="light">
-      <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" v-model="password" ></ion-input>
-    </ion-item>
-    <ion-button @click="loginEmailPassword(login, password); loginOpen= false; login=''; password=''" >Login</ion-button>
-  </div>
-  <div class="googleLoginWrapper">
-  <ion-icon :icon="logoGoogle"></ion-icon>
-  <button v-if="!userIsLogged" @click="signInWithGoogle">Sign in with Google</button>
-  </div>
-</fieldset>
-<fieldset v-if="signInOpen" class="signInWrapper">
-  Sign up
-  <div class="loginInputWrapper">
-    <ion-item color="light">
-      <ion-label position="floating">Email</ion-label>
-      <ion-input type="text" v-model="emailToSignIn" ></ion-input>
-    </ion-item>
-    <ion-item color="light">
-      <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" v-model="passwordToSignIn" ></ion-input>
-    </ion-item>
-    <ion-button @click="registerEmailPassword(emailToSignIn, passwordToSignIn); signInOpen= false; emailToSignIn=''; passwordToSignIn=''">Sign up</ion-button>
-  </div>
-  <div class="googleLoginWrapper">
-  <ion-icon :icon="logoGoogle"></ion-icon>
-  <button v-if="!userIsLogged" @click="signInWithGoogle">Sign in with Google</button>
-  </div>
-</fieldset>
+  <section>
+    <fieldset v-if="loginOpen" class="loginWrapper">
 
-</section>
+      <div class="loginInputWrapper">
+        Login
+        <ion-item color="light">
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="text" v-model="login"></ion-input>
+        </ion-item>
+        <ion-item color="light">
+          <ion-label position="floating">Password</ion-label>
+          <ion-input type="password" v-model="password"></ion-input>
+        </ion-item>
+        <ion-button @click="loginEmailPassword(login, password); loginOpen= false; login=''; password=''">Login
+        </ion-button>
+      </div>
+      <div class="googleLoginWrapper">
+
+        <!--    logowanie przez google nie dziala na androidzie-->
+
+        <!--  <button v-if="!userIsLogged" @click="signInWithGoogle">Sign in with Google</button>-->
+      </div>
+    </fieldset>
+    <fieldset v-if="signInOpen" class="signInWrapper">
+
+      <div class="loginInputWrapper">
+        Sign up
+        <ion-item color="light">
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="text" v-model="emailToSignIn"></ion-input>
+        </ion-item>
+        <ion-item color="light">
+          <ion-label position="floating">Password</ion-label>
+          <ion-input type="password" v-model="passwordToSignIn"></ion-input>
+        </ion-item>
+        <ion-button
+            @click="registerEmailPassword(emailToSignIn, passwordToSignIn); signInOpen= false; emailToSignIn=''; passwordToSignIn=''">
+          Sign up
+        </ion-button>
+      </div>
+      <div class="googleLoginWrapper">
+
+        <!--    logowanie przez google nie dziala na androidzie-->
+        <!--    <ion-icon :icon="logoGoogle"></ion-icon>-->
+        <!--  <button v-if="!userIsLogged" @click="signInWithGoogle">Sign in with Google</button>-->
+      </div>
+    </fieldset>
+
+  </section>
 
 </template>
 
@@ -65,8 +75,9 @@ section {
 
 
 }
-fieldset {
 
+fieldset {
+  border: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,6 +86,7 @@ fieldset {
   margin: 10px;
   border-radius: 5px;
 }
+
 .signInWrapper {
   opacity: 0;
   animation: fadeIn 0.2s ease-in-out forwards;
@@ -87,6 +99,7 @@ fieldset {
   gap: 10px;
 
 }
+
 .googleLoginWrapper button {
   background-color: transparent;
 
@@ -94,13 +107,29 @@ fieldset {
   color: #0d0d0d;
 
 }
+
 .loginWrapper {
   opacity: 0;
   animation: fadeIn 0.2s ease-in-out forwards;
+
 }
+
 @keyframes fadeIn {
   100% {
     opacity: 1;
   }
+}
+.loginInputWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: rgba(128, 128, 128, 0.7) 1px solid;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: rgba(128, 128, 128, 0.7) 1px 2px 4px 0;
+  background-color: beige;
+
 }
 </style>

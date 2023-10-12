@@ -134,9 +134,10 @@ ion-range {
   justify-content: space-between;
 }
 fieldset {
-  box-shadow: grey 2px 4px 6px 0;
+
   border: rgba(13, 13, 13, 0.4) 1px solid;
   border-radius: 5px;
+  box-shadow: rgba(128, 128, 128, 0.7) 1px 2px 4px 0;
 }
 .lastJobWrapper {
   gap: 2px;
@@ -144,11 +145,11 @@ fieldset {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 10px;
+  margin: 10px 0;
   padding: 10px;
   border: rgba(13, 13, 13, 0.4) 1px solid;
   border-radius: 5px;
-  box-shadow: grey 2px 4px 6px 0;
+  box-shadow: rgba(128, 128, 128, 0.7) 1px 2px 4px 0;
   background-color: beige;
 }
 .lastJobTitle {

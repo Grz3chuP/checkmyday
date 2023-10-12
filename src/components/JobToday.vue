@@ -62,7 +62,7 @@ console.log('users/'+ userUid + '/joblist');
   justify-content: center;
   align-items: center;
   gap: 3px;
-  box-shadow:  grey 2px 4px 6px 0;
+  box-shadow:  grey 2px 4px 3px 0;
   border-radius: 5px;
   border:  rgba(13, 13, 13, 0.4) 1px solid;
   padding: 5px;
