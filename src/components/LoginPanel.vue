@@ -2,7 +2,7 @@
 import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonIcon} from '@ionic/vue';
 import {ref} from "vue";
 import {loginEmailPassword, logout, registerEmailPassword, signInWithGoogle} from "@/firestore";
-import {userIsLogged} from "@/store";
+import {loginOpen, signInOpen, userIsLogged} from "@/store";
 import {logoGoogle} from "ionicons/icons";
 
 
@@ -15,7 +15,7 @@ const passwordToSignIn = ref('')
 
 <template>
 <section >
-<fieldset v-if="!userIsLogged" class="loginWrapper">
+<fieldset v-if="loginOpen" class="loginWrapper">
  Login
   <div class="loginInputWrapper">
   <ion-item color="light">
@@ -26,14 +26,14 @@ const passwordToSignIn = ref('')
       <ion-label position="floating">Password</ion-label>
       <ion-input type="password" v-model="password" ></ion-input>
     </ion-item>
-    <ion-button @click="loginEmailPassword(login, password)">Login</ion-button>
+    <ion-button @click="loginEmailPassword(login, password); loginOpen= false; login=''; password=''" >Login</ion-button>
   </div>
   <div class="googleLoginWrapper">
   <ion-icon :icon="logoGoogle"></ion-icon>
   <button v-if="!userIsLogged" @click="signInWithGoogle">Sign in with Google</button>
   </div>
 </fieldset>
-<fieldset v-if="!userIsLogged" class="signInWrapper">
+<fieldset v-if="signInOpen" class="signInWrapper">
   Sign up
   <div class="loginInputWrapper">
     <ion-item color="light">
@@ -44,7 +44,7 @@ const passwordToSignIn = ref('')
       <ion-label position="floating">Password</ion-label>
       <ion-input type="password" v-model="passwordToSignIn" ></ion-input>
     </ion-item>
-    <ion-button @click="registerEmailPassword(emailToSignIn, passwordToSignIn)">Sign up</ion-button>
+    <ion-button @click="registerEmailPassword(emailToSignIn, passwordToSignIn); signInOpen= false; emailToSignIn=''; passwordToSignIn=''">Sign up</ion-button>
   </div>
   <div class="googleLoginWrapper">
   <ion-icon :icon="logoGoogle"></ion-icon>
@@ -53,7 +53,7 @@ const passwordToSignIn = ref('')
 </fieldset>
 
 </section>
-<ion-button v-if="userIsLogged" @click="logout()">Log out</ion-button>
+
 </template>
 
 <style scoped>
@@ -73,9 +73,11 @@ fieldset {
   justify-content: center;
   gap: 10px;
   margin: 10px;
+  border-radius: 5px;
 }
 .signInWrapper {
-  position: absolute;
+  opacity: 0;
+  animation: fadeIn 0.2s ease-in-out forwards;
 }
 
 .googleLoginWrapper {
@@ -91,5 +93,14 @@ fieldset {
   font-size: 1rem;
   color: #0d0d0d;
 
+}
+.loginWrapper {
+  opacity: 0;
+  animation: fadeIn 0.2s ease-in-out forwards;
+}
+@keyframes fadeIn {
+  100% {
+    opacity: 1;
+  }
 }
 </style>

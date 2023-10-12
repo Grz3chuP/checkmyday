@@ -1,5 +1,19 @@
 <script setup lang="ts">
 import { IonButton } from '@ionic/vue';
+import {loginOpen, signInOpen, userIsLogged} from "@/store";
+import {logout} from "@/firestore";
+
+
+function openLoginPanel() {
+  loginOpen.value = !loginOpen.value;
+  if(signInOpen.value) signInOpen.value = !signInOpen.value;
+
+}
+function openSignInPanel() {
+  signInOpen.value = !signInOpen.value;
+  if(loginOpen.value) loginOpen.value = !loginOpen.value;
+}
+
 </script>
 
 <template>
@@ -7,9 +21,9 @@ import { IonButton } from '@ionic/vue';
   <div class="loginPanel">
    <div class="logMenu">Job Panel</div>
 
-    <div class="logMenu"><ion-button size="small"> Login</ion-button></div>
-    <div class="logMenu"><ion-button size="small"> Sign up</ion-button></div>
-    <div class="logMenu" ><ion-button size="small"> Log out</ion-button></div>
+    <div class="logMenu" v-if="!userIsLogged"><ion-button size="small" @click="openLoginPanel"> Login</ion-button></div>
+    <div class="logMenu" v-if="!userIsLogged"><ion-button size="small" @click="openSignInPanel"> Sign up</ion-button></div>
+    <div class="logMenu" v-if="userIsLogged"><ion-button size="small" @click="logout()"> Log out</ion-button></div>
 
 
 

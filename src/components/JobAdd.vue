@@ -3,7 +3,7 @@ import {computed, onUpdated, ref, watch} from "vue";
 import { IonButton, IonInput, IonItem, IonLabel, IonRange, IonIcon } from '@ionic/vue';
 import {cash, cashOutline} from "ionicons/icons";
 import {addJobItemToFireStore} from "@/firestore";
-import {getJobList, nameValue, userUid} from "@/store";
+import {getJobList, nameValue, userIsLogged, userUid} from "@/store";
 
 const nameProps = defineProps(['nameUsed']);
 
@@ -17,7 +17,7 @@ const nameUsed = computed(() => {
 })
 
 async function addJob() {
-  if (!jobName.value) {
+  if (!jobName.value || userIsLogged.value === false) {
     return
   }
   const t = new Date().getTime();
@@ -41,7 +41,7 @@ const jobPay = ref(0);
 const pay = ref(40);
 
 const lastJobAdd = computed(() => {
-  if(!lastJob.value) {
+  if(!lastJob.value || userIsLogged.value === false) {
     return 'no job added yet'
   }
   return new Date(lastJob.value.date).toLocaleDateString('en-GB', {
@@ -136,6 +136,7 @@ ion-range {
 fieldset {
   box-shadow: grey 2px 4px 6px 0;
   border: rgba(13, 13, 13, 0.4) 1px solid;
+  border-radius: 5px;
 }
 .lastJobWrapper {
   gap: 2px;

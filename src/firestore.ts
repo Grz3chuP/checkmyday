@@ -6,7 +6,7 @@ import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, q
 import { getAuth, signInWithPopup, GoogleAuthProvider, connectAuthEmulator, onAuthStateChanged, signOut,
             signInWithEmailAndPassword, createUserWithEmailAndPassword , AuthErrorCodes } from "firebase/auth";
 import {ref} from "vue";
-import {getJobList, jobList, testList, userIsLogged, userUid} from "@/store";
+import {getJobList, jobList, loginOpen, signInOpen, testList, userIsLogged, userUid} from "@/store";
 
 
 // Your web app's Firebase configuration
@@ -141,6 +141,7 @@ export const loginEmailPassword = async (login:string, password:string) => {
         const userCredential = await signInWithEmailAndPassword(auth, login, password);
         console.log(userCredential);
         userUid.value = userCredential.user?.uid;
+        loginOpen.value = false;
     }
     catch (error) {
         console.log(error);
@@ -167,7 +168,7 @@ export const registerEmailPassword = async (login:string, password:string) => {
         const newUser = {email: userCredential.user?.email, uid: userCredential.user?.uid};
         await addItemFireStoreWithCustomId(newUser, 'users', newUser.uid);
 
-
+        signInOpen.value = false;
         console.log(userCredential);
     }
     catch (error) {
@@ -196,6 +197,8 @@ export const logout = async () => {
     try {
         await signOut(auth);
         jobList.value = [];
+        userIsLogged.value = false;
+        userUid.value = '';
         console.log('wylogowany');
     }
     catch (error) {
@@ -213,7 +216,8 @@ export const signInWithGoogle = async () => {
         const userCredential = await signInWithPopup(auth, provider);
         const newUser = {email: userCredential.user?.email, uid: userCredential.user?.uid};
         await addItemFireStoreWithCustomId(newUser, 'users', newUser.uid);
-
+        signInOpen.value = false;
+        loginOpen.value = false;
         console.log(userCredential);
     }
     catch (error) {
