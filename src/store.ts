@@ -1,5 +1,5 @@
 import {computed, ref} from "vue";
-import {getJobListFromFireStoreOrEmptyArray} from "@/firestore";
+import {checkUserIsLogin, getJobListFromFireStoreOrEmptyArray} from "@/firestore";
 
 export let userIsLogged = ref(false);
 export const userUid = ref('');
@@ -25,7 +25,9 @@ export let jobNumber = ref(0);
 export let jobList = ref<any[]>([]);
 
 export async function getJobList() {
-    jobList.value = await getJobListFromFireStoreOrEmptyArray('joblist');
+
+        jobList.value = await getJobListFromFireStoreOrEmptyArray('users/' + userUid.value + '/joblist');
+
 }
 
 

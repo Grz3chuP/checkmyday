@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {getJobList, jobList} from "../store";
+import {getJobList, jobList, userUid} from "../store";
 import {computed, ref} from "vue";
 import {deleteJobItemFromFireStore} from "@/firestore";
 
@@ -18,8 +18,8 @@ const todayJobs = computed(() => {
 });
 
 function deleteJob(job: any) {
-
-  deleteJobItemFromFireStore(job, 'joblist');
+console.log('users/'+ userUid + '/joblist');
+  deleteJobItemFromFireStore(job, 'users/'+ userUid.value + '/joblist');
   getJobList()
 }
 </script>

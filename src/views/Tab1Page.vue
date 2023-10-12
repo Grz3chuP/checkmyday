@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Job Panel </ion-title>
+        <ion-title> <LoginHeader/> </ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
@@ -22,4 +22,6 @@
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
 import ExploreContainer from '@/components/ExploreContainer.vue';
 import JobPanel from "@/components/JobPanel.vue";
+import LoginPanel from "@/components/LoginPanel.vue";
+import LoginHeader from "@/components/LoginHeader.vue";
 </script>

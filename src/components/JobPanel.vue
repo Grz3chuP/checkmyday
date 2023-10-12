@@ -6,6 +6,7 @@ import JobAdd from "@/components/JobAdd.vue";
 import JobToday from "@/components/JobToday.vue";
 import {computed, ref} from "vue";
 import LoginPanel from "@/components/LoginPanel.vue";
+import {checkUserIsLogin} from "@/firestore";
 
 
 const nameUsed = ref('');

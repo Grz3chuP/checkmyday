@@ -6,7 +6,7 @@ import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, q
 import { getAuth, signInWithPopup, GoogleAuthProvider, connectAuthEmulator, onAuthStateChanged, signOut,
             signInWithEmailAndPassword, createUserWithEmailAndPassword , AuthErrorCodes } from "firebase/auth";
 import {ref} from "vue";
-import {testList, userIsLogged, userUid} from "@/store";
+import {getJobList, jobList, testList, userIsLogged, userUid} from "@/store";
 
 
 // Your web app's Firebase configuration
@@ -36,6 +36,7 @@ export async function getJobListFromFireStoreOrEmptyArray(path: string) {
             let item = doc.data();
 
             item.id = doc.id;
+
             jobList.push(item);
         });
         return jobList;
@@ -180,6 +181,8 @@ export const checkUserIsLogin = async () => {
             if (user) {
                 console.log('zalogowany' + user.email);
                 userIsLogged.value = true;
+                userUid.value = user.uid;
+                getJobList()
             } else {
                 console.log('niezalogowany');
                 userIsLogged.value = false;
@@ -192,6 +195,7 @@ checkUserIsLogin();
 export const logout = async () => {
     try {
         await signOut(auth);
+        jobList.value = [];
         console.log('wylogowany');
     }
     catch (error) {
@@ -207,6 +211,9 @@ export const signInWithGoogle = async () => {
 
     try {
         const userCredential = await signInWithPopup(auth, provider);
+        const newUser = {email: userCredential.user?.email, uid: userCredential.user?.uid};
+        await addItemFireStoreWithCustomId(newUser, 'users', newUser.uid);
+
         console.log(userCredential);
     }
     catch (error) {
