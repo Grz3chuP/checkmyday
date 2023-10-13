@@ -10,6 +10,10 @@ import {DateTime, Info} from "luxon";
 
 
 const weekDays = ref<any>([{
+
+    name: 'Sunday',
+    list: []
+  }, {
   name: 'Monday',
   list: []
 }, {
@@ -27,10 +31,7 @@ const weekDays = ref<any>([{
 }, {
   name: 'Saturday',
   list: []
-}, {
-  name: 'Sunday',
-  list: []
-}]);
+},]);
 const jobListIsOn = ref(true);
 
 let nameToSearch = ref('');
