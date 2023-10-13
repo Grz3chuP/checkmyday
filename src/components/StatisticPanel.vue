@@ -91,6 +91,7 @@ async function clickSearchByName() {
   pickWeekDay(testList.value);
   jobListIsOn.value=false;
 }
+
 </script>
 
 <template>
