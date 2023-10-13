@@ -98,19 +98,9 @@ export async function updateJobItemFromFireStore(item: any, path: string) {
 // plus testowanie laczenia sie z baza danych
 const db = getFirestore(appFire);
 
-const colRef = collection(db, 'joblist');
-
-export let serchValue = ref('');
-
-
-    // onSnapshot(serchByName, (snapshot: any) => {
-    //     testList.value = [];
-    //     snapshot.docs.forEach((doc: any) => {
-    //         testList.value.push({...doc.data(), id: doc.id})
-    //     })
-    // });
 
 export function serchByName(name:string) {
+    const colRef = collection(db, 'users/'+ userUid.value +'/joblist');
     let serchByName = query(colRef, where("name", "==", name));
     getDocs(serchByName).then((querySnapshot: any) => {
         testList.value = [];
@@ -121,6 +111,7 @@ export function serchByName(name:string) {
 }
 
 export function searchByDate(start: any, end: any ) {
+    const colRef = collection(db, 'users/'+ userUid.value +'/joblist');
    // let searchByDate = query(colRef, where("date", ">=", start), where("date", "<=", end));
     let searchByDate = query(colRef, where("date", ">=", start), where("date", "<=", end));
     getDocs(searchByDate).then((querySnapshot: any) => {

@@ -124,7 +124,7 @@ fieldset {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+
   border: rgba(128, 128, 128, 0.7) 1px solid;
   padding: 10px;
   border-radius: 5px;
