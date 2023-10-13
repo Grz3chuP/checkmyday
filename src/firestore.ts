@@ -4,7 +4,7 @@ import { initializeApp } from "firebase/app";
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, where, onSnapshot, setDoc } from 'firebase/firestore';
 import { getAuth, signInWithPopup, GoogleAuthProvider, connectAuthEmulator, onAuthStateChanged, signOut,
-            signInWithEmailAndPassword, createUserWithEmailAndPassword, AuthErrorCodes } from "firebase/auth";
+    signInWithEmailAndPassword, createUserWithEmailAndPassword, AuthErrorCodes } from "firebase/auth";
 
 import {ref} from "vue";
 import {getJobList, jobList, loginOpen, signInOpen, testList, userIsLogged, userUid} from "@/store";
@@ -99,29 +99,63 @@ export async function updateJobItemFromFireStore(item: any, path: string) {
 const db = getFirestore(appFire);
 
 
-export function serchByName(name:string) {
+// export function serchByName(name:string) {
+//     const colRef = collection(db, 'users/'+ userUid.value +'/joblist');
+//     let serchByName = query(colRef, where("name", "==", name));
+//         getDocs(serchByName).then((querySnapshot: any) => {
+//         testList.value = [];
+//         querySnapshot.forEach((doc: any) => {
+//             testList.value.push({...doc.data(), id: doc.id})
+//         })
+//     });
+// }
+
+
+export async function searchByName(name:string) {
     const colRef = collection(db, 'users/'+ userUid.value +'/joblist');
     let serchByName = query(colRef, where("name", "==", name));
-    getDocs(serchByName).then((querySnapshot: any) => {
+    try {
         testList.value = [];
-        querySnapshot.forEach((doc: any) => {
+        const docs =  await getDocs(serchByName)
+        docs.forEach((doc: any) => {
             testList.value.push({...doc.data(), id: doc.id})
+
         })
-    });
+    } catch (e) {
+        console.error("Error updating document: ", e);
+    }
 }
+// export function searchByDate(start: any, end: any ) {
+//     const colRef = collection(db, 'users/'+ userUid.value +'/joblist');
+//    // let searchByDate = query(colRef, where("date", ">=", start), where("date", "<=", end));
+//     let searchByDate = query(colRef, where("date", ">=", start), where("date", "<=", end));
+//     getDocs(searchByDate).then((querySnapshot: any) => {
+//         testList.value = [];
+//         querySnapshot.forEach((doc: any) => {
+//             testList.value.push({...doc.data(), id: doc.id})
+//         })
+//
+//     })
+//
+// }
 
-export function searchByDate(start: any, end: any ) {
-    const colRef = collection(db, 'users/'+ userUid.value +'/joblist');
-   // let searchByDate = query(colRef, where("date", ">=", start), where("date", "<=", end));
-    let searchByDate = query(colRef, where("date", ">=", start), where("date", "<=", end));
-    getDocs(searchByDate).then((querySnapshot: any) => {
-        testList.value = [];
-        querySnapshot.forEach((doc: any) => {
-            testList.value.push({...doc.data(), id: doc.id})
-        })
+export function searchByDate(start: any, end: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+        const colRef = collection(db, 'users/' + userUid.value + '/joblist');
+        let searchByDate = query(colRef, where("date", ">=", start), where("date", "<=", end));
 
-    })
-
+        getDocs(searchByDate)
+            .then((querySnapshot: any) => {
+                testList.value = [];
+                querySnapshot.forEach((doc: any) => {
+                    testList.value.push({...doc.data(), id: doc.id});
+                });
+                resolve(testList.value);  // Resolve the Promise
+            })
+            .catch((error: any) => {
+                reject(error);  // Reject the Promise if there is an error
+            });
+    });
 }
 
 //Autoryzacja uzytkownika Logi in i Log out plus sign in with email and password
@@ -170,17 +204,17 @@ export const registerEmailPassword = async (login:string, password:string) => {
 }
 //sprawdzanie czy uzytkownik jest zalogowany
 export const checkUserIsLogin = async () => {
-  onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log('zalogowany' + user.email);
-                userIsLogged.value = true;
-                userUid.value = user.uid;
-                getJobList()
-            } else {
-                console.log('niezalogowany');
-                userIsLogged.value = false;
-            }
-        });
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log('zalogowany' + user.email);
+            userIsLogged.value = true;
+            userUid.value = user.uid;
+            getJobList()
+        } else {
+            console.log('niezalogowany');
+            userIsLogged.value = false;
+        }
+    });
 }
 checkUserIsLogin();
 
@@ -220,7 +254,7 @@ export const signInWithGoogle = async () => {
 
 //odzyskiwanie hasla przez email
 
- export const passwordRecoveryByEmail = async () => {
+export const passwordRecoveryByEmail = async () => {
 
 
- }
+}

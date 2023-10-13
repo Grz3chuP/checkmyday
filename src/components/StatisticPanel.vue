@@ -3,35 +3,39 @@
 
 
 import {testList, jobList} from "../store";
-import {searchByDate, serchByName} from "@/firestore";
+import {searchByDate, searchByName} from "@/firestore";
 import {computed, ref} from "vue";
 import {IonDatetime} from "@ionic/vue";
 import {DateTime, Info} from "luxon";
 
 
-const weekDays = ref<any>([{
+function initWeekDays() {
+  return [{
 
     name: 'Sunday',
     list: []
   }, {
-  name: 'Monday',
-  list: []
-}, {
-  name: 'Tuesday',
-  list: []
-}, {
-  name: 'Wednesday',
-  list: []
-}, {
-  name: 'Thursday',
-  list: []
-}, {
-  name: 'Friday',
-  list: []
-}, {
-  name: 'Saturday',
-  list: []
-},]);
+    name: 'Monday',
+    list: []
+  }, {
+    name: 'Tuesday',
+    list: []
+  }, {
+    name: 'Wednesday',
+    list: []
+  }, {
+    name: 'Thursday',
+    list: []
+  }, {
+    name: 'Friday',
+    list: []
+  }, {
+    name: 'Saturday',
+    list: []
+  }];
+}
+
+const weekDays = ref<any>(initWeekDays());
 const jobListIsOn = ref(true);
 
 let nameToSearch = ref('');
@@ -39,16 +43,21 @@ let startDate = ref<any>(DateTime.now());
 let endDate = ref<any>(DateTime.now());
 
 function searchByDateRange() {
+  weekDays.value = initWeekDays();
+
   let start: any = new Date(startDate.value);
   let end: any = new Date(endDate.value);
   start = start.setHours(0, 0, 0, 0);
   end = end.setHours(23, 59, 59, 999);
   console.log('ostateczny test' + start);
-  searchByDate(start, end);
-  pickWeekDay(testList.value);
+  searchByDate(start, end).then((res: any) => {
+    testList.value = res;
+    pickWeekDay(testList.value);
+  })
+  // pickWeekDay(testList.value);
 
 
-  testList.value = [];
+  // testList.value = [];
 
 }
 
@@ -71,17 +80,16 @@ const dayFilter = (day: any, listName: any) => {
 };
 
 const calculatingPercent = (day: any) => {
-  console.log('day.list.length' + day.list.length);
-  console.log('testlist.list.length' + testList.value.length);
-  console.log('joblist.list.length' + jobList.value.length);
-  console.log('jobListIsOn.value' + jobListIsOn.value);
   if (!jobListIsOn.value) {
     return (day.list.length / testList.value.length) * 100;
   } else {
     return (day.list.length / jobList.value.length) * 100;
   }
-
-
+}
+async function clickSearchByName() {
+  await searchByName(nameToSearch.value);
+  pickWeekDay(testList.value);
+  jobListIsOn.value=false;
 }
 </script>
 
@@ -89,40 +97,41 @@ const calculatingPercent = (day: any) => {
   <div class="namePickerWrapper">
     <input type="text" v-model="nameToSearch" placeholder="Search by name">
 
-    <button @click="serchByName(nameToSearch); pickWeekDay(testList); jobListIsOn=false">Search by Name</button>
+    <button @click="clickSearchByName()">Search by Name</button>
   </div>
 
- <div style="position: relative">
-  <div class="datePickerWrapper">
-    <div class="datePickers">
+  <div style="position: relative">
+    <div class="datePickerWrapper">
+      <div class="datePickers">
 
-      <ion-datetime class="startTime " presentation="date" :prefer-wheel="true" v-model="startDate"></ion-datetime>
+        <ion-datetime class="startTime " presentation="date" :prefer-wheel="true" v-model="startDate"></ion-datetime>
+      </div>
+      <div class="datePickers">
+
+        <ion-datetime class="endTime" presentation="date" :prefer-wheel="true" v-model="endDate"></ion-datetime>
+      </div>
+
     </div>
-    <div class="datePickers">
-
-      <ion-datetime class="endTime" presentation="date" :prefer-wheel="true" v-model="endDate"></ion-datetime>
+    <div class="buttonSearchWrapper">
+      <div class="fromAndTo">From: {{ new Date(startDate).toLocaleDateString() }}</div>
+      <div class="fromAndTo"> To:{{ new Date(endDate).toLocaleDateString() }}</div>
+      <button class="searchByNameButton" @click="searchByDateRange(); jobListIsOn=false">Search by Date</button>
     </div>
-
   </div>
-  <div class="buttonSearchWrapper">
-    <div class="fromAndTo">From: {{ new Date(startDate).toLocaleDateString() }}</div>
-    <div class="fromAndTo"> To:{{ new Date(endDate).toLocaleDateString() }}</div>
-    <button class="searchByNameButton" @click="searchByDateRange(); jobListIsOn=false">Search by Date</button>
-  </div>
- </div>
   <div style="width: 100%; display: flex; justify-content: center"   >
-  <button class="showAllJobsButton" @click="pickWeekDay(jobList); jobListIsOn=true">Show All Jobs</button>
+    <button class="showAllJobsButton" @click="pickWeekDay(jobList); jobListIsOn=true">Show All Jobs</button>
   </div>
   <div class="statisticOverviewWrapper">
     <div class="statisticOverview">
       <div class="statisticDay" v-for="day in weekDays">
         <div class="nameDay">{{ day.name }}</div>
+        <div style="flex: 1">
+          <div class="testPercents" :style="{width: calculatingPercent(day) + '%',  backgroundColor: 'red' }">
 
-        <div class="testPercents" :style="{width: calculatingPercent(day) + '%',  backgroundColor: 'red' }">
+            <div class="jobTotalAndJobNumbers"> {{ day.list.reduce((acc, item) => acc + item.pay, 0) }}</div>
+            <div class="jobTotalAndJobNumbers"> {{ day.list.length }}</div>
 
-          <div class="jobTotalAndJobNumbers"> {{ day.list.reduce((acc, item) => acc + item.pay, 0) }}</div>
-          <div class="jobTotalAndJobNumbers"> {{ day.list.length }}</div>
-
+          </div>
         </div>
       </div>
     </div>
@@ -139,7 +148,6 @@ const calculatingPercent = (day: any) => {
 }
 
 ion-datetime {
-
   padding: 0;
   margin: 0;
   font-size: 0.5rem;
@@ -172,7 +180,6 @@ ion-datetime {
   display: flex;
   justify-content: center;
   align-items: center;
-
   margin: 0;
   padding: 2px;
   font-size: 0.8rem;
@@ -185,7 +192,6 @@ ion-datetime {
 }
 
 .showAllJobsButton {
-
   width: fit-content;
   padding: 1px;
   font-size: 1rem;
@@ -193,10 +199,9 @@ ion-datetime {
   color: #ff0000;
   border-radius: 5px;
   border: grey 1px solid;
-   margin: 0 0 10px 0;
+  margin: 0 0 10px 0;
   background-color: #ececb5;
 }
-
 
 .buttonSearchWrapper {
   position: absolute;
@@ -212,15 +217,12 @@ ion-datetime {
 }
 
 .searchByNameButton {
-
-
   padding: 1px;
   font-size: 1rem;
   cursor: pointer;
   color: #ff0000;
   border-radius: 5px;
   border: grey 1px solid;
-
   background-color: #ececb5;
 }
 
@@ -249,10 +251,8 @@ ion-datetime {
   padding: 3px;
   font-size: 1rem;
   cursor: pointer;
-
   border-radius: 5px;
   border: grey 1px solid;
-
 }
 
 .statisticDay {
@@ -274,9 +274,7 @@ ion-datetime {
   position: absolute;
   left: 55px;
   top: -50%;
-
   font-size: 0.7rem;
-
 }
 
 .testPercents {
@@ -285,18 +283,14 @@ ion-datetime {
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   z-index: 1;
-
-
+  transition: 0.4s ease-out;
 }
-
 
 .nameDay {
   font-size: 0.8rem;
   width: 70px;
 
-
 }
-
 .nameDay::after {
   content: '';
   position: absolute;
@@ -307,6 +301,7 @@ ion-datetime {
   transform: translateY(-50%);
   left: 75px;
   z-index: 2;
+
 }
 
 .jobTotalAndJobNumbers {
@@ -320,6 +315,5 @@ ion-datetime {
   background-color: rgba(255, 255, 255, 0.4);
   color: #000000;
 }
-
 
 </style>`
