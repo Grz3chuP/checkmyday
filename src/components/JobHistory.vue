@@ -256,7 +256,8 @@ const weekTotalPay = computed(() => {
   width: 100%;
   height: 100%;
   padding: 5px;
-
+  overflow-x: auto;
+  overflow-y: hidden;
 
 }
 

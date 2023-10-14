@@ -7,7 +7,7 @@ import {searchByDate, searchByName} from "@/firestore";
 import {computed, ref} from "vue";
 import {IonDatetime} from "@ionic/vue";
 import {DateTime, Info} from "luxon";
-
+import {IonRippleEffect} from "@ionic/vue";
 
 function initWeekDays() {
   return [{
@@ -96,9 +96,13 @@ async function clickSearchByName() {
 
 <template>
   <div class="namePickerWrapper">
-    <input type="text" v-model="nameToSearch" placeholder="Search by name">
+    <input style="z-index: -1; max-width: 150px" type="text" v-model="nameToSearch" placeholder="Search by name">
  <div style="position: relative">
-    <button class="searchByNameButton" @click="clickSearchByName()">Search by Name</button>
+  <button class="searchByNameButton" @click="clickSearchByName()">
+
+
+
+        Search by Name</button>
  </div>
   </div>
 
@@ -185,26 +189,62 @@ ion-datetime {
   align-items: center;
   margin: 0;
   padding: 2px;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: bold;
   color: #0a1828;
   background-color: #ffffff;
   border-radius: 5px;
-  box-shadow: rgba(128, 128, 128, 0.7) 1px 2px 1px 0;
+  box-shadow: rgba(128, 128, 128, 0.7) 1px 1px 1px 0;
   border: grey 1px solid;
+
+  z-index: -3;
 }
 
 .showAllJobsButton {
-  width: fit-content;
-
-  padding: 3px;
+  width: 150px;
+  position: relative;
+  padding: 5px;
   font-size: 1rem;
   cursor: pointer;
   color: #0d1105;
-  border-radius: 5px;
+
   border: grey 1px solid;
-  margin: 0 0 10px 0;
+  border-bottom: none;
+  margin: 0 0 25px 0;
   background-color: #ececb5;
+  z-index: 2;
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+.showAllJobsButton:active {
+  scale: 1.2;
+  transition: 0.2s;
+}
+.showAllJobsButton::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #ececb5;
+
+  border-bottom: grey solid 1px;
+  border-right: grey solid 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 23px;
+  rotate: 45deg;
+  z-index: -1;
+
+}
+.showAllJobsButton::after {
+  content: '';
+  position: absolute;
+  width: 146px;
+  height: 1px;
+  background-color: grey;
+  z-index: -2;
+  bottom: 0;
+  left: 1px;
 }
 
 .buttonSearchWrapper {
@@ -221,24 +261,42 @@ ion-datetime {
 }
 
 .searchByNameButton {
-  padding: 2px 11px;
+  padding: 2px 6px;
   font-size: 1rem;
   cursor: pointer;
   color: #0d1105;
-  border-radius: 5px;
-  border: grey 1px solid;
+  border-top: grey 1px solid;
+  border-bottom: grey 1px solid;
   background-color: #ececb5;
+
+}
+
+
+.searchByNameButton:active {
+  scale: 1.2;
+  transition: 0.2s;
+}
+.searchByNameButton:first-child {
+  border-right: grey 1px solid;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 .searchByNameButton:last-child::after {
   content: '';
   position: absolute;
   width: 15px;
   height: 15px;
-  left: -5px;
+  left: -8px;
+  border-top-right-radius: 1px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 1px;
+
   background-color: #ececb5;
   border-top: grey solid 1px;
   border-left: grey solid 1px;
+
   rotate: -45deg;
+  z-index: -1;
 }
 .searchByDateButton {
   position: relative;
@@ -249,11 +307,16 @@ ion-datetime {
   position: absolute;
   width: 15px;
   height: 15px;
-  left: -7px;
+  left: -8px;
   background-color: #ececb5;
   border-top: grey solid 1px;
   border-left: grey solid 1px;
+
   rotate: -45deg;
+  z-index: -1;
+  border-top-right-radius: 1px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 1px;
 
 }
 .searchByDateButton::after {
@@ -261,11 +324,15 @@ ion-datetime {
   position: absolute;
   width: 15px;
   height: 15px;
-  right: -7px;
+  right: -8px;
   background-color: #ececb5;
   border-top: grey solid 1px;
   border-left: grey solid 1px;
   rotate: 135deg;
+  z-index: -1;
+  border-top-right-radius: 1px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 1px;
 
 
 }
