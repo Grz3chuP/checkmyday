@@ -2,6 +2,7 @@
 import { IonButton } from '@ionic/vue';
 import {loginOpen, signInOpen, userIsLogged} from "@/store";
 import {logout} from "@/firestore";
+import {setupIsOpen} from "@/setup";
 
 
 function openLoginPanel() {
@@ -13,6 +14,9 @@ function openSignInPanel() {
   signInOpen.value = !signInOpen.value;
   if(loginOpen.value) loginOpen.value = !loginOpen.value;
 }
+function closeOpenLoginPanel() {
+ setupIsOpen.value = !setupIsOpen.value;
+}
 
 </script>
 
@@ -21,10 +25,10 @@ function openSignInPanel() {
   <div class="loginPanel">
    <div class="logMenu">Job Panel</div>
 
-    <div class="logMenu" v-if="!userIsLogged"><ion-button size="small" @click="openLoginPanel"> Login</ion-button></div>
-    <div class="logMenu" v-if="!userIsLogged"><ion-button size="small" @click="openSignInPanel"> Sign up</ion-button></div>
-    <div class="logMenu" v-if="userIsLogged"><ion-button size="small" @click="logout()"> Log out</ion-button></div>
-
+    <div class="logMenu" v-if="!userIsLogged"><ion-button size="small" @click="openLoginPanel">Login</ion-button></div>
+    <div class="logMenu" v-if="!userIsLogged"><ion-button size="small" @click="openSignInPanel">Sign up</ion-button></div>
+    <div class="logMenu" v-if="userIsLogged"><ion-button size="small" @click="logout()">Log out</ion-button></div>
+    <div class="logMenu"><ion-button size="small" @click="closeOpenLoginPanel">Setup</ion-button></div>
 
 
   </div>

@@ -1,5 +1,6 @@
 import {computed, ref} from "vue";
 import {checkUserIsLogin, getJobListFromFireStoreOrEmptyArray} from "@/firestore";
+
 export let loginOpen = ref(false);
 export let signInOpen = ref(false);
 export let userIsLogged = ref(false);

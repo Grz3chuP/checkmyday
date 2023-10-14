@@ -7,6 +7,8 @@ import JobToday from "@/components/JobToday.vue";
 import {computed, ref} from "vue";
 import LoginPanel from "@/components/LoginPanel.vue";
 import {checkUserIsLogin} from "@/firestore";
+import SetupPanel from "@/components/SetupPanel.vue";
+import {setupIsOpen} from "@/setup";
 
 
 const nameUsed = ref('');
@@ -39,7 +41,7 @@ const todayUniName = computed( () => {
 <template>
 
 
-
+  <SetupPanel/>
   <LoginPanel/>
   <section>
     <div class="uniNameWrapper">
