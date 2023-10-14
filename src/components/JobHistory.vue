@@ -214,7 +214,7 @@ const weekTotalPay = computed(() => {
   gap: 5px;
   width: 100%;
   background-color: #ffffff;
-  margin: 10px 0 0 30px;
+  margin: 10px 0 0 0;
 }
 .weekTotalPay {
  padding: 5px;
@@ -238,15 +238,14 @@ const weekTotalPay = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  gap: 5px;
-  box-shadow: grey 1px 2px 4px 0;
+  gap: 2px;
+  box-shadow: rgba(128, 128, 128, 0.7) 1px 2px 3px 0;
   border-radius: 5px;
   background-color: beige;
   width:100%;
   height: 30px;
-  padding: 5px;
-  margin: 5px;
+  padding: 1px;
+  margin: 3px;
 }
 
 .singleDay {

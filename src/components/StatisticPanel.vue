@@ -97,8 +97,9 @@ async function clickSearchByName() {
 <template>
   <div class="namePickerWrapper">
     <input type="text" v-model="nameToSearch" placeholder="Search by name">
-
-    <button @click="clickSearchByName()">Search by Name</button>
+ <div style="position: relative">
+    <button class="searchByNameButton" @click="clickSearchByName()">Search by Name</button>
+ </div>
   </div>
 
   <div style="position: relative">
@@ -115,8 +116,9 @@ async function clickSearchByName() {
     </div>
     <div class="buttonSearchWrapper">
       <div class="fromAndTo">From: {{ new Date(startDate).toLocaleDateString() }}</div>
+      <button class="searchByNameButton searchByDateButton" @click="searchByDateRange(); jobListIsOn=false">Search by Date</button>
+
       <div class="fromAndTo"> To:{{ new Date(endDate).toLocaleDateString() }}</div>
-      <button class="searchByNameButton" @click="searchByDateRange(); jobListIsOn=false">Search by Date</button>
     </div>
   </div>
   <div style="width: 100%; display: flex; justify-content: center"   >
@@ -126,7 +128,7 @@ async function clickSearchByName() {
     <div class="statisticOverview">
       <div class="statisticDay" v-for="day in weekDays">
         <div class="nameDay">{{ day.name }}</div>
-        <div style="flex: 1">
+        <div style="flex: 1; height: 100% ">
           <div class="testPercents" :style="{width: calculatingPercent(day) + '%',  backgroundColor: 'red' }">
 
             <div class="jobTotalAndJobNumbers"> {{ day.list.reduce((acc, item) => acc + item.pay, 0) }}</div>
@@ -188,16 +190,17 @@ ion-datetime {
   color: #0a1828;
   background-color: #ffffff;
   border-radius: 5px;
-  box-shadow: grey 1px 2px 2px 0;
+  box-shadow: rgba(128, 128, 128, 0.7) 1px 2px 1px 0;
   border: grey 1px solid;
 }
 
 .showAllJobsButton {
   width: fit-content;
-  padding: 1px;
+
+  padding: 3px;
   font-size: 1rem;
   cursor: pointer;
-  color: #ff0000;
+  color: #0d1105;
   border-radius: 5px;
   border: grey 1px solid;
   margin: 0 0 10px 0;
@@ -207,7 +210,7 @@ ion-datetime {
 .buttonSearchWrapper {
   position: absolute;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   width: 100%;
   margin: 0;
@@ -218,15 +221,54 @@ ion-datetime {
 }
 
 .searchByNameButton {
-  padding: 1px;
+  padding: 2px 11px;
   font-size: 1rem;
   cursor: pointer;
-  color: #ff0000;
+  color: #0d1105;
   border-radius: 5px;
   border: grey 1px solid;
   background-color: #ececb5;
 }
+.searchByNameButton:last-child::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  left: -5px;
+  background-color: #ececb5;
+  border-top: grey solid 1px;
+  border-left: grey solid 1px;
+  rotate: -45deg;
+}
+.searchByDateButton {
+  position: relative;
+}
 
+.searchByDateButton::before {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  left: -7px;
+  background-color: #ececb5;
+  border-top: grey solid 1px;
+  border-left: grey solid 1px;
+  rotate: -45deg;
+
+}
+.searchByDateButton::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  right: -7px;
+  background-color: #ececb5;
+  border-top: grey solid 1px;
+  border-left: grey solid 1px;
+  rotate: 135deg;
+
+
+}
 .namePickerWrapper {
   display: flex;
   width: 100%;
@@ -236,16 +278,6 @@ ion-datetime {
   gap: 5px;
   margin: 8px 0;
   z-index: 1;
-}
-
-.namePickerWrapper button {
-  padding: 1px;
-  font-size: 1rem;
-  cursor: pointer;
-  color: #ff0000;
-  border-radius: 5px;
-  border: grey 1px solid;
-  background-color: #ececb5;
 }
 
 .namePickerWrapper input {
