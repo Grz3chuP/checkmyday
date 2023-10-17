@@ -1,5 +1,6 @@
 import {computed, ref} from "vue";
 import {checkUserIsLogin, getJobListFromFireStoreOrEmptyArray} from "@/firestore";
+import {setupList, stepValue} from "@/setup";
 
 export let loginOpen = ref(false);
 export let signInOpen = ref(false);
@@ -27,12 +28,24 @@ export let jobNumber = ref(0);
 export let jobList = ref<any[]>([]);
 
 export async function getJobList() {
-        if(userIsLogged.value)
-        jobList.value = await getJobListFromFireStoreOrEmptyArray('users/' + userUid.value + '/joblist');
+    console.log(userUid.value);
+        if(userIsLogged.value) {
+            jobList.value = await getJobListFromFireStoreOrEmptyArray('users/' + userUid.value + '/joblist', jobList.value);
+            getSetupList()
+        }
 
 }
+export async function getSetupList() {
+console.log(userUid.value);
+if(userIsLogged.value) {
+    setupList.value = await getJobListFromFireStoreOrEmptyArray('users/' + userUid.value + '/setup', setupList.value);
+    stepValue.value = setupList.value[0].stepValue;
+}
+}
 
+export async function saveSetupListToDataBase() {
 
+}
 export function changeNameValue(name: string) {
     nameValue.value = name;
 

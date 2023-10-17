@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {changeNameValue, getJobList, jobList, todayPay} from "../store";
+import {changeNameValue, getJobList, getSetupList, jobList, todayPay} from "../store";
 import {getAuth, signInWithPopup, GoogleAuthProvider, signOut} from "firebase/auth";
 import JobAdd from "@/components/JobAdd.vue";
 import JobToday from "@/components/JobToday.vue";
@@ -14,8 +14,8 @@ import {setupIsOpen} from "@/setup";
 const nameUsed = ref('');
 const userCredentials = ref<any>('');
 
-
 getJobList()
+
 const thisDayLastJobs = computed( ()=> {
   const today = new Date().getDay();
   console.log(today);
@@ -31,7 +31,7 @@ const auth = getAuth();
 const todayUniName = computed( () => {
   return [...new Set(thisDayLastJobs.value.map((item: any) => item.name))];
 })
-
+getSetupList()
 
 
 

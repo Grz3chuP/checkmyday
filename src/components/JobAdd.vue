@@ -4,6 +4,7 @@ import { IonButton, IonInput, IonItem, IonLabel, IonRange, IonIcon } from '@ioni
 import {cash, cashOutline} from "ionicons/icons";
 import {addJobItemToFireStore} from "@/firestore";
 import {getJobList, nameValue, userIsLogged, userUid} from "@/store";
+import {stepValue} from "@/setup";
 
 const nameProps = defineProps(['nameUsed']);
 
@@ -73,7 +74,7 @@ const lastJobAdd = computed(() => {
     <ion-range class="randgeSlider"
                aria-label="Range with custom ticks"
                :pin="true"
-               :step="5"
+               :step="stepValue"
                :ticks="true"
                :snaps="true"
                :min="0"

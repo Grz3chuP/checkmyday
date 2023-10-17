@@ -2,9 +2,21 @@
 import {setupIsOpen, stepValue} from "@/setup";
 import {ref, computed} from "vue";
 import {IonRange} from "@ionic/vue";
+import {getSetupList, userIsLogged, userUid} from "@/store";
+import {addItemFireStoreWithCustomId, addJobItemToFireStore} from "@/firestore";
 
 
+function saveSetupPanel() {
+  if(userIsLogged.value === false) {
+    alert('You need to login first')
 
+  }
+  else {
+    console.log(userIsLogged.value)
+   addItemFireStoreWithCustomId({stepValue: stepValue.value}, 'users/' + userUid.value + '/setup', 'settings')
+    setupIsOpen.value = !setupIsOpen.value;
+  }
+}
 
 
 
@@ -30,13 +42,13 @@ import {IonRange} from "@ionic/vue";
                        :step="1"
                        :ticks="true"
                        :snaps="true"
-                       :min="0"
+                       :min="1"
                        :max="10"
                        v-model="stepValue"></ion-range>
           </div>
         </div>
         <div class="saveSetupButton">
-          <ion-button @click="setupIsOpen = !setupIsOpen">Save</ion-button>
+          <ion-button @click=" saveSetupPanel() ">Save</ion-button>
         </div>
       </div>
     </div>

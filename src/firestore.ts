@@ -7,7 +7,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, connectAuthEmulator, onAu
     signInWithEmailAndPassword, createUserWithEmailAndPassword, AuthErrorCodes } from "firebase/auth";
 
 import {ref} from "vue";
-import {getJobList, jobList, loginOpen, signInOpen, testList, userIsLogged, userUid} from "@/store";
+import {getJobList, getSetupList, jobList, loginOpen, signInOpen, testList, userIsLogged, userUid} from "@/store";
 
 
 // Your web app's Firebase configuration
@@ -24,23 +24,23 @@ const firebaseConfig = {
 // Initialize Firebase
 export const appFire = initializeApp(firebaseConfig);
 
-export async function getJobListFromFireStoreOrEmptyArray(path: string) {
+export async function getJobListFromFireStoreOrEmptyArray(path: string, listType: any) {
     const db = getFirestore(appFire);
     const jobListCol = collection(db, path);
     const jobListSnapshot = await getDocs(jobListCol);
-    //console.log(jobListSnapshot);
+
     if (jobListSnapshot.empty) {
         return [];
     } else {
-        const jobList: any[] = [];
+        const listType: any[] = [];
         jobListSnapshot.forEach(doc => {
             let item = doc.data();
 
             item.id = doc.id;
 
-            jobList.push(item);
+            listType.push(item);
         });
-        return jobList;
+        return listType;
     }
 }
 
@@ -226,6 +226,7 @@ export const logout = async () => {
         userIsLogged.value = false;
         userUid.value = '';
         console.log('wylogowany');
+
     }
     catch (error) {
         console.log(error);
