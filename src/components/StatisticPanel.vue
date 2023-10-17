@@ -86,6 +86,17 @@ const calculatingPercent = (day: any) => {
     return (day.list.length / jobList.value.length) * 100;
   }
 }
+const calculatingTotalPayPercent = (day: any) => {
+  if (!jobListIsOn.value) {
+    let todayTotal = day.list.reduce((acc: any, item: any) => acc + item.pay, 0);
+    let totalPay = testList.value.reduce((acc: any, item: any) => acc + item.pay, 0);
+    return todayTotal / totalPay * 100;
+  } else {
+    let todayTotal = day.list.reduce((acc: any, item: any) => acc + item.pay, 0);
+    let totalPay = jobList.value.reduce((acc: any, item: any) => acc + item.pay, 0);
+    return todayTotal / totalPay * 100;
+  }
+}
 async function clickSearchByName() {
   await searchByName(nameToSearch.value);
   pickWeekDay(testList.value);
@@ -133,11 +144,13 @@ async function clickSearchByName() {
       <div class="statisticDay" v-for="day in weekDays">
         <div class="nameDay">{{ day.name }}</div>
         <div style="flex: 1; height: 100% ">
-          <div class="testPercents" :style="{width: calculatingPercent(day) + '%',  backgroundColor: 'red' }">
-
-            <div class="jobTotalAndJobNumbers"> {{ day.list.reduce((acc, item) => acc + item.pay, 0) }}</div>
+          <div class="testPercentsJobs" :style="{width: calculatingPercent(day) + '%',  backgroundColor: 'red' }">
             <div class="jobTotalAndJobNumbers"> {{ day.list.length }}</div>
-
+            <div class="jobTotalAndJobNumbers"> {{ calculatingPercent(day).toFixed(1) }}%</div>
+          </div>
+          <div class="testPercentsTotal" :style="{width: calculatingTotalPayPercent(day) + '%',  backgroundColor: 'blue' }">
+            <div class="jobTotalAndJobNumbers"> {{ day.list.reduce((acc, item) => acc + item.pay, 0) }}</div>
+            <div class="jobTotalAndJobNumbers"> {{ calculatingTotalPayPercent(day).toFixed(1) }}%</div>
           </div>
         </div>
       </div>
@@ -364,31 +377,56 @@ ion-datetime {
   border-radius: 5px;
   background-color: beige;
   width: 100%;
-  height: 30px;
+
   padding: 5px;
   margin: 5px;
 }
 
 .statisticDay:first-child::after {
-  content: 'Total: Pay | Jobs';
+  content: 'Total';
   position: absolute;
-  left: 55px;
-  top: -50%;
+  left: 77px;
+  top: -30%;
   font-size: 0.7rem;
 }
 
-.testPercents {
+.testPercentsJobs {
   display: flex;
   height: 100%;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   z-index: 1;
   transition: 0.4s ease-out;
+  position: relative;
 }
+.testPercentsJobs::before {
+  content: 'Events';
+  position: absolute;
+  left: -30px;
+  top: 2px;
+  font-size: 0.6rem;
 
+
+}
+.testPercentsTotal {
+  display: flex;
+  height: 100%;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  z-index: 1;
+  transition: 0.4s ease-out;
+  position: relative;
+}
+.testPercentsTotal::before {
+  content: 'Value';
+  position: absolute;
+  left: -25px;
+  top: 2px;
+  font-size: 0.6rem;
+}
 .nameDay {
   font-size: 0.8rem;
-  width: 70px;
+  width:100px;
 
 }
 .nameDay::after {
@@ -399,7 +437,7 @@ ion-datetime {
   background-color: #0a1828;
   top: 50%;
   transform: translateY(-50%);
-  left: 75px;
+  left: 105px;
   z-index: 2;
 
 }
