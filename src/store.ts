@@ -5,6 +5,8 @@ import {setupList, stepValue} from "@/setup";
 export let loginOpen = ref(false);
 export let signInOpen = ref(false);
 export let userIsLogged = ref(false);
+
+export let resetPasswordOpen = ref(false);
 export const userUid = ref('');
 export let nameValue = ref('');
 export let todayPay = computed(() => {

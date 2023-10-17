@@ -2,8 +2,10 @@
 import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonIcon} from '@ionic/vue';
 import {ref} from "vue";
 import {loginEmailPassword, logout, registerEmailPassword, signInWithGoogle} from "@/firestore";
-import {loginOpen, signInOpen, userIsLogged} from "@/store";
+import {loginOpen, resetPasswordOpen, signInOpen, userIsLogged} from "@/store";
 import {logoGoogle} from "ionicons/icons";
+import ResetPassword from "@/components/ResetPassword.vue";
+import * as events from "events";
 
 
 const login = ref('')
@@ -11,9 +13,11 @@ const password = ref('')
 const emailToSignIn = ref('')
 const passwordToSignIn = ref('')
 
+
 </script>
 
 <template>
+  <ResetPassword v-if="resetPasswordOpen" @closeResetPanel="resetPasswordOpen = false"/>
   <section>
     <fieldset v-if="loginOpen" class="loginWrapper">
 
@@ -29,7 +33,12 @@ const passwordToSignIn = ref('')
         </ion-item>
         <ion-button @click="loginEmailPassword(login, password); loginOpen= false; login=''; password=''">Login
         </ion-button>
+        <div class="forgotPassword" @click="resetPasswordOpen = !resetPasswordOpen">
+          Forgot password?
+        </div>
+
       </div>
+
       <div class="googleLoginWrapper">
 
         <!--    logowanie przez google nie dziala na androidzie-->
@@ -131,5 +140,12 @@ fieldset {
   box-shadow: rgba(128, 128, 128, 0.7) 1px 2px 4px 0;
   background-color: beige;
 
+}
+.forgotPassword {
+  font-size: 0.8rem;
+  color: #0d0d0d;
+    cursor: pointer;
+  text-decoration: underline;
+  margin-top: 8px;
 }
 </style>

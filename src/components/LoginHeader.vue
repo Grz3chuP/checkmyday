@@ -1,18 +1,27 @@
 <script setup lang="ts">
 import { IonButton } from '@ionic/vue';
-import {loginOpen, signInOpen, userIsLogged} from "@/store";
+import {loginOpen, resetPasswordOpen, signInOpen, userIsLogged} from "@/store";
 import {logout} from "@/firestore";
 import {setupIsOpen} from "@/setup";
 
 
 function openLoginPanel() {
   loginOpen.value = !loginOpen.value;
-  if(signInOpen.value) signInOpen.value = !signInOpen.value;
+  if(signInOpen.value)  {
+    signInOpen.value = !signInOpen.value
+  } if (!signInOpen.value) {
+    resetPasswordOpen.value = false;
+  }
+
 
 }
 function openSignInPanel() {
   signInOpen.value = !signInOpen.value;
-  if(loginOpen.value) loginOpen.value = !loginOpen.value;
+  if(loginOpen.value) {
+    loginOpen.value = !loginOpen.value;
+  } if (!loginOpen.value) {
+      resetPasswordOpen.value = false;
+  }
 }
 function closeOpenLoginPanel() {
  setupIsOpen.value = !setupIsOpen.value;
