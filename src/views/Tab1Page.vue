@@ -24,4 +24,5 @@ import ExploreContainer from '@/components/ExploreContainer.vue';
 import JobPanel from "@/components/JobPanel.vue";
 import LoginPanel from "@/components/LoginPanel.vue";
 import LoginHeader from "@/components/LoginHeader.vue";
+
 </script>

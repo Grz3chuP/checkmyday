@@ -1,19 +1,28 @@
 <script setup lang="ts">
-import {setupIsOpen, stepValue} from "@/setup";
+import {eventName, setupIsOpen, stepValue} from "@/setup";
 import {ref, computed} from "vue";
-import {IonRange} from "@ionic/vue";
+import {IonInput, IonItem, IonLabel, IonRange} from "@ionic/vue";
 import {getSetupList, userIsLogged, userUid} from "@/store";
 import {addItemFireStoreWithCustomId, addJobItemToFireStore} from "@/firestore";
 
-
+let newEventName = ref('');
 function saveSetupPanel() {
   if(userIsLogged.value === false) {
     alert('You need to login first')
 
   }
   else {
+    if (newEventName.value === '') {
+      newEventName.value = eventName.value;
+    }
+    eventName.value = newEventName.value;
     console.log(userIsLogged.value)
-   addItemFireStoreWithCustomId({stepValue: stepValue.value}, 'users/' + userUid.value + '/setup', 'settings')
+    const dataToSave = {
+      stepValue: stepValue.value,
+      eventName: eventName.value
+    }
+   addItemFireStoreWithCustomId( dataToSave, 'users/' + userUid.value + '/setup', 'settings')
+    newEventName.value = '';
     setupIsOpen.value = !setupIsOpen.value;
   }
 }
@@ -32,7 +41,7 @@ function saveSetupPanel() {
 }">
       <div class="setupWrapper">
         <div class="setupTitle">Setup</div>
-        <div class="setupStepsForCounts">
+        <div class="setupSingleSetting">
           <div class="stepsNameForCounts">Counts Steps:</div>
           <div class="stepsValueForCounts">{{ stepValue }}</div>
           <div class="stepsRangeWrapper">
@@ -45,6 +54,18 @@ function saveSetupPanel() {
                        :min="1"
                        :max="10"
                        v-model="stepValue"></ion-range>
+          </div>
+        </div>
+
+        <div class="setupSingleSetting">
+          <div class="stepsNameForCounts">Event Name:</div>
+          <div class="eventNamePickedValue">{{ eventName }}</div>
+          <div class="eventNameWrapper">
+              <input type="text"
+                     v-model="newEventName"
+                     placeholder="Event Name"
+                     maxlength="10"
+              >
           </div>
         </div>
         <div class="saveSetupButton">
@@ -118,21 +139,22 @@ function saveSetupPanel() {
   padding: 5px;
   width: 100%;
   text-align: center;
-  border-bottom: grey 1px solid;
+
 }
-.setupStepsForCounts {
+.setupSingleSetting {
   position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
   height: 40px;
-  margin: 0;
+  margin-bottom: 10px;
   padding: 0;
   background-color: white;
   border-bottom: grey 1px solid;
+  border-top: grey 1px solid;
 }
-.setupStepsForCounts ion-range {
+.setupSingleSetting ion-range {
 
   margin: 0 5px;
 
@@ -170,6 +192,23 @@ function saveSetupPanel() {
   padding: 5px;
   font-size: 1.5rem;
   cursor: pointer;
+
+}
+.eventNameWrapper {
+ font-size: 0.7rem;
+
+}
+.eventNameWrapper input {
+  width: 75px;
+  padding: 5px;
+
+}
+.eventNamePickedValue {
+  text-wrap: none;
+  font-size: 0.9rem;
+  width: 70px;
+  flex-grow: 0.6;
+
 
 }
 </style>

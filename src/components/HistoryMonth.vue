@@ -5,6 +5,7 @@ import {computed, ref} from "vue";
 import {IonButton} from "@ionic/vue";
 import {getJobList, jobList} from "@/store";
 import {DateTime} from "luxon";
+import {eventName} from "../setup";
 
 let prevMonthNumber = ref<any>(0)
 let firstDayOfMonth = ref<any>(0)
@@ -61,7 +62,7 @@ function goBack() {
     <p>{{startOfTheMonth.reduce((acc, item) => acc + item.pay, 0)}}</p>
   </div>
   <div class="totalNumberOfJobs">
-   Jobs:
+   {{eventName}}:
     <p> {{startOfTheMonth.length}} </p>
   </div>
 

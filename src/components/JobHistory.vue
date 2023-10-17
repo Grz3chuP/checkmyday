@@ -7,6 +7,7 @@ import {DateTime} from "luxon";
 import {refresh} from "ionicons/icons";
 import {IDniTygodnia} from "@/Interfaces/IDniTygodnia";
 import HistoryMonth from "@/components/HistoryMonth.vue";
+import {eventName} from "../setup";
 
 getJobList();
 
@@ -145,7 +146,7 @@ const weekTotalPay = computed(() => {
     <div class="weekTotalPay">{{weekTotalPay}}</div>
     </div>
     <div style="display: flex; align-items: center ">
-      Jobs:
+      {{ eventName }}:
       <div >{{thisWeekItems.length}}</div>
     </div>
   </div>
@@ -162,7 +163,7 @@ const weekTotalPay = computed(() => {
 
         </div>
         <div class="noJob">
-          {{ day.jobs.length === 0 ? 'no jobs'  : '' }}
+          {{ day.jobs.length === 0 ? 'no '+ eventName  : '' }}
         </div>
         <div v-for="job in day.jobs" class="singleJob">
 

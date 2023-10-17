@@ -2,7 +2,7 @@
 import { IonButton } from '@ionic/vue';
 import {loginOpen, resetPasswordOpen, signInOpen, userIsLogged} from "@/store";
 import {logout} from "@/firestore";
-import {setupIsOpen} from "@/setup";
+import {eventName, setupIsOpen} from "@/setup";
 
 
 function openLoginPanel() {
@@ -32,7 +32,7 @@ function closeOpenLoginPanel() {
 <template>
 
   <div class="loginPanel">
-   <div class="logMenu">Job Panel</div>
+   <div class="logMenu">Add Panel</div>
 
     <div class="logMenu" v-if="!userIsLogged"><ion-button size="small" @click="openLoginPanel">Login</ion-button></div>
     <div class="logMenu" v-if="!userIsLogged"><ion-button size="small" @click="openSignInPanel">Sign up</ion-button></div>

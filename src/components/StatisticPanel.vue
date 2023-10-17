@@ -8,6 +8,7 @@ import {computed, ref} from "vue";
 import {IonDatetime} from "@ionic/vue";
 import {DateTime, Info} from "luxon";
 import {IonRippleEffect} from "@ionic/vue";
+import {eventName} from "../setup";
 
 function initWeekDays() {
   return [{
@@ -137,7 +138,7 @@ async function clickSearchByName() {
     </div>
   </div>
   <div style="width: 100%; display: flex; justify-content: center"   >
-    <button class="showAllJobsButton" @click="pickWeekDay(jobList); jobListIsOn=true">Show All Jobs</button>
+    <button class="showAllJobsButton" @click="pickWeekDay(jobList); jobListIsOn=true">Show All {{ eventName }}</button>
   </div>
   <div class="statisticOverviewWrapper">
     <div class="statisticOverview">
@@ -214,7 +215,7 @@ ion-datetime {
 }
 
 .showAllJobsButton {
-  width: 150px;
+  width: 220px;
   position: relative;
   padding: 5px;
   font-size: 1rem;
@@ -252,7 +253,7 @@ ion-datetime {
 .showAllJobsButton::after {
   content: '';
   position: absolute;
-  width: 146px;
+  width: 216px;
   height: 1px;
   background-color: grey;
   z-index: -2;

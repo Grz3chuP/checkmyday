@@ -1,6 +1,6 @@
 import {computed, ref} from "vue";
 import {checkUserIsLogin, getJobListFromFireStoreOrEmptyArray} from "@/firestore";
-import {setupList, stepValue} from "@/setup";
+import {eventName, setupList, stepValue} from "@/setup";
 
 export let loginOpen = ref(false);
 export let signInOpen = ref(false);
@@ -42,6 +42,7 @@ console.log(userUid.value);
 if(userIsLogged.value) {
     setupList.value = await getJobListFromFireStoreOrEmptyArray('users/' + userUid.value + '/setup', setupList.value);
     stepValue.value = setupList.value[0].stepValue;
+    eventName.value = setupList.value[0].eventName;
 }
 }
 

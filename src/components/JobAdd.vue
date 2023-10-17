@@ -4,7 +4,7 @@ import { IonButton, IonInput, IonItem, IonLabel, IonRange, IonIcon } from '@ioni
 import {cash, cashOutline} from "ionicons/icons";
 import {addJobItemToFireStore} from "@/firestore";
 import {getJobList, nameValue, userIsLogged, userUid} from "@/store";
-import {stepValue} from "@/setup";
+import {eventName, stepValue} from "@/setup";
 
 const nameProps = defineProps(['nameUsed']);
 
@@ -43,7 +43,7 @@ const pay = ref(40);
 
 const lastJobAdd = computed(() => {
   if(!lastJob.value || userIsLogged.value === false) {
-    return 'no job added yet'
+    return 'no '+ eventName.value +' added yet'
   }
   return new Date(lastJob.value.date).toLocaleDateString('en-GB', {
     weekday: 'long',
@@ -60,11 +60,11 @@ const lastJobAdd = computed(() => {
 <section>
   <fieldset class="backG">
     <ion-item color="light">
-      <ion-label position="floating">Job Name</ion-label>
+      <ion-label position="floating">{{ eventName }} Name</ion-label>
       <ion-input type="text" v-model="jobName"></ion-input>
     </ion-item>
     <ion-item color="light"  >
-      <ion-label class="cashLabel" position="floating">Job Pay
+      <ion-label class="cashLabel" position="floating">{{eventName}} Count
       <ion-item color="light"  class="cashIconWithMoney">
         <ion-icon :icon="cashOutline"></ion-icon>
         {{pay}}
@@ -82,10 +82,10 @@ const lastJobAdd = computed(() => {
 
                v-model="pay" > {{pay}}</ion-range>
     </ion-item>
-    <ion-button @click="addJob" >Add Job</ion-button>
+    <ion-button @click="addJob" >Add {{ eventName }}</ion-button>
   </fieldset>
   <div class="lastJobWrapper">
-    <div class="lastJobTitle">Last Job </div>
+    <div class="lastJobTitle">Last {{ eventName }} </div>
     <div class="lastJobName">
       {{lastJob.name}}
     </div>
