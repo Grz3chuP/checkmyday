@@ -43,7 +43,7 @@ const jobListIsOn = ref(true);
 
 let startDate = ref<any>(DateTime.now());
 let endDate = ref<any>(DateTime.now());
-
+let searchIndicator = ref('none');
 function searchByDateRange() {
   weekDays.value = initWeekDays();
 
@@ -55,6 +55,7 @@ function searchByDateRange() {
   searchByDate(start, end).then((res: any) => {
     testList.value = res;
     pickWeekDay(testList.value);
+    searchIndicator.value =  new Date(start).toLocaleDateString() + ' <> ' + new Date(end).toLocaleDateString();
   })
   // pickWeekDay(testList.value);
 
@@ -104,6 +105,7 @@ async function clickSearchByName() {
   await searchByName(nameToSearch.value);
   pickWeekDay(testList.value);
   jobListIsOn.value = false;
+  searchIndicator.value = nameToSearch.value;
   nameToSearch.value = '';
 }
 
@@ -146,7 +148,13 @@ async function clickSearchByName() {
     </div>
   </div>
   <div style="width: 100%; display: flex; justify-content: center">
-    <button class="showAllJobsButton" @click="pickWeekDay(jobList); jobListIsOn=true">Show All {{ eventName }}</button>
+    <button class="showAllJobsButton" @click="pickWeekDay(jobList); jobListIsOn=true; searchIndicator= 'All '+ eventName">Show All {{ eventName }} </button>
+  </div>
+  <div class="searchIndicatorWrapper">
+    <div style="font-size: 0.8rem">Current Search</div>
+    <div class="searchIndicator">
+     {{ searchIndicator }}
+    </div>
   </div>
   <div class="statisticOverviewWrapper">
     <div class="statisticOverview">
@@ -170,6 +178,26 @@ async function clickSearchByName() {
 </template>
 
 <style scoped>
+.searchIndicatorWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+}
+.searchIndicator {
+  border: grey 1px solid;
+  border-radius: 5px;
+  background-color: rgba(131, 190, 114, 0.9);
+  width: fit-content;
+  min-width: 20px;
+  padding: 5px;
+  text-align: center;
+  z-index: 10;
+  transition: 0.2s;
+  text-wrap: nowrap;
+
+}
 .datePickerWrapper {
   position: relative;
   display: flex;
@@ -240,10 +268,8 @@ ion-datetime {
   font-size: 1rem;
   cursor: pointer;
   color: #0d1105;
-
   border: grey 1px solid;
-  border-bottom: none;
-  margin: 0 0 25px 0;
+  margin-bottom: 5px;
   background-color: #ececb5;
   z-index: 2;
   box-sizing: border-box;
@@ -255,33 +281,7 @@ ion-datetime {
   transition: 0.2s;
 }
 
-.showAllJobsButton::before {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background-color: #ececb5;
 
-  border-bottom: grey solid 1px;
-  border-right: grey solid 1px;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 23px;
-  rotate: 45deg;
-  z-index: -1;
-
-}
-
-.showAllJobsButton::after {
-  content: '';
-  position: absolute;
-  width: 216px;
-  height: 1px;
-  background-color: grey;
-  z-index: -2;
-  bottom: 0;
-  left: 1px;
-}
 
 .buttonSearchWrapper {
   position: absolute;
@@ -486,5 +486,7 @@ ion-datetime {
   background-color: rgba(255, 255, 255, 0.4);
   color: #000000;
 }
-
+.statisticOverviewWrapper {
+  margin-top: 10px;
+}
 </style>`
