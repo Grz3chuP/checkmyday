@@ -2,13 +2,14 @@
 <script setup lang="ts">
 
 
-import {testList, jobList} from "../store";
+import {testList, jobList, nameToSearch} from "../store";
 import {searchByDate, searchByName} from "@/firestore";
 import {computed, ref} from "vue";
 import {IonDatetime} from "@ionic/vue";
 import {DateTime, Info} from "luxon";
 import {IonRippleEffect} from "@ionic/vue";
 import {eventName} from "../setup";
+import StatisticByname from "@/components/StatisticByname.vue";
 
 function initWeekDays() {
   return [{
@@ -39,7 +40,7 @@ function initWeekDays() {
 const weekDays = ref<any>(initWeekDays());
 const jobListIsOn = ref(true);
 
-let nameToSearch = ref('');
+
 let startDate = ref<any>(DateTime.now());
 let endDate = ref<any>(DateTime.now());
 
@@ -98,24 +99,29 @@ const calculatingTotalPayPercent = (day: any) => {
     return todayTotal / totalPay * 100;
   }
 }
+
 async function clickSearchByName() {
   await searchByName(nameToSearch.value);
   pickWeekDay(testList.value);
-  jobListIsOn.value=false;
+  jobListIsOn.value = false;
+  nameToSearch.value = '';
 }
 
 </script>
 
 <template>
   <div class="namePickerWrapper">
-    <input style="z-index: -1; max-width: 150px" type="text" v-model="nameToSearch" placeholder="Search by name">
- <div style="position: relative">
-  <button class="searchByNameButton" @click="clickSearchByName()">
+    <input style="z-index: 10; max-width: 150px" type="text" v-model="nameToSearch" placeholder="Search by name">
+    <div style="position: relative">
+      <button class="searchByNameButton" @click="clickSearchByName()">
 
 
-
-        Search by Name</button>
- </div>
+        Search by Name
+      </button>
+    </div>
+  </div>
+  <div class="nameDisplayWrapper">
+     <StatisticByname @searchName="clickSearchByName"/>
   </div>
 
   <div style="position: relative">
@@ -132,12 +138,14 @@ async function clickSearchByName() {
     </div>
     <div class="buttonSearchWrapper">
       <div class="fromAndTo">From: {{ new Date(startDate).toLocaleDateString() }}</div>
-      <button class="searchByNameButton searchByDateButton" @click="searchByDateRange(); jobListIsOn=false">Search by Date</button>
+      <button class="searchByNameButton searchByDateButton" @click="searchByDateRange(); jobListIsOn=false">Search by
+        Date
+      </button>
 
       <div class="fromAndTo"> To:{{ new Date(endDate).toLocaleDateString() }}</div>
     </div>
   </div>
-  <div style="width: 100%; display: flex; justify-content: center"   >
+  <div style="width: 100%; display: flex; justify-content: center">
     <button class="showAllJobsButton" @click="pickWeekDay(jobList); jobListIsOn=true">Show All {{ eventName }}</button>
   </div>
   <div class="statisticOverviewWrapper">
@@ -149,7 +157,8 @@ async function clickSearchByName() {
             <div class="jobTotalAndJobNumbers"> {{ day.list.length }}</div>
             <div class="jobTotalAndJobNumbers"> {{ calculatingPercent(day).toFixed(1) }}%</div>
           </div>
-          <div class="testPercentsTotal" :style="{width: calculatingTotalPayPercent(day) + '%',  backgroundColor: 'blue' }">
+          <div class="testPercentsTotal"
+               :style="{width: calculatingTotalPayPercent(day) + '%',  backgroundColor: 'blue' }">
             <div class="jobTotalAndJobNumbers"> {{ day.list.reduce((acc, item) => acc + item.pay, 0) }}</div>
             <div class="jobTotalAndJobNumbers"> {{ calculatingTotalPayPercent(day).toFixed(1) }}%</div>
           </div>
@@ -178,7 +187,17 @@ ion-datetime {
   box-shadow: rgba(128, 128, 128, 0.7) 1px 4px 2px 2px;
 
 }
-
+.nameDisplayWrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  position: absolute;
+  width: 100%;
+  height: 30px;
+  overflow-x: scroll;
+  z-index: 10;
+  gap: 2px;
+  margin-left: 3px;
+}
 .startTime .endTime {
   position: absolute;
   margin: 0;
@@ -230,10 +249,12 @@ ion-datetime {
   box-sizing: border-box;
   border-radius: 3px;
 }
+
 .showAllJobsButton:active {
   scale: 1.2;
   transition: 0.2s;
 }
+
 .showAllJobsButton::before {
   content: '';
   position: absolute;
@@ -250,6 +271,7 @@ ion-datetime {
   z-index: -1;
 
 }
+
 .showAllJobsButton::after {
   content: '';
   position: absolute;
@@ -290,11 +312,13 @@ ion-datetime {
   scale: 1.2;
   transition: 0.2s;
 }
+
 .searchByNameButton:first-child {
   border-right: grey 1px solid;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
+
 .searchByNameButton:last-child::after {
   content: '';
   position: absolute;
@@ -310,8 +334,9 @@ ion-datetime {
   border-left: grey solid 1px;
 
   rotate: -45deg;
-  z-index: -1;
+  z-index: 10;
 }
+
 .searchByDateButton {
   position: relative;
 }
@@ -333,6 +358,7 @@ ion-datetime {
   border-bottom-left-radius: 1px;
 
 }
+
 .searchByDateButton::after {
   content: '';
   position: absolute;
@@ -350,15 +376,16 @@ ion-datetime {
 
 
 }
+
 .namePickerWrapper {
   display: flex;
   width: 100%;
-  position: absolute;
+
   justify-content: center;
   align-items: center;
   gap: 5px;
   margin: 8px 0;
-  z-index: 1;
+  z-index: 11;
 }
 
 .namePickerWrapper input {
@@ -400,6 +427,7 @@ ion-datetime {
   transition: 0.4s ease-out;
   position: relative;
 }
+
 .testPercentsJobs::before {
   content: 'Events';
   position: absolute;
@@ -409,6 +437,7 @@ ion-datetime {
 
 
 }
+
 .testPercentsTotal {
   display: flex;
   height: 100%;
@@ -418,6 +447,7 @@ ion-datetime {
   transition: 0.4s ease-out;
   position: relative;
 }
+
 .testPercentsTotal::before {
   content: 'Value';
   position: absolute;
@@ -425,11 +455,13 @@ ion-datetime {
   top: 2px;
   font-size: 0.6rem;
 }
+
 .nameDay {
   font-size: 0.8rem;
-  width:100px;
+  width: 100px;
 
 }
+
 .nameDay::after {
   content: '';
   position: absolute;

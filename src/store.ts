@@ -9,6 +9,8 @@ export let userIsLogged = ref(false);
 export let resetPasswordOpen = ref(false);
 export const userUid = ref('');
 export let nameValue = ref('');
+//imie do wyszukiwania w Statistic
+export let nameToSearch = ref('');
 export let todayPay = computed(() => {
 let sum = 0;
 const currentDay = new Date().getTime();

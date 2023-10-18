@@ -4,7 +4,7 @@ import { initializeApp } from "firebase/app";
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, where, onSnapshot, setDoc } from 'firebase/firestore';
 import { getAuth, signInWithPopup, GoogleAuthProvider, connectAuthEmulator, onAuthStateChanged, signOut,
-    signInWithEmailAndPassword, createUserWithEmailAndPassword, AuthErrorCodes, sendPasswordResetEmail } from "firebase/auth";
+    signInWithEmailAndPassword, createUserWithEmailAndPassword, AuthErrorCodes, sendPasswordResetEmail, deleteUser } from "firebase/auth";
 
 import {ref} from "vue";
 import {getJobList, getSetupList, jobList, loginOpen, signInOpen, testList, userIsLogged, userUid} from "@/store";
