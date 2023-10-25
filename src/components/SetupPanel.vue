@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import {eventName, setupIsOpen, stepValue} from "@/setup";
+import {eventName, maxValue, setupIsOpen, stepValue} from "@/setup";
 import {ref, computed} from "vue";
 import {IonInput, IonItem, IonLabel, IonRange} from "@ionic/vue";
 import {getSetupList, userIsLogged, userUid} from "@/store";
 import {addItemFireStoreWithCustomId, addJobItemToFireStore} from "@/firestore";
 
 let newEventName = ref('');
+
 function saveSetupPanel() {
-  if(userIsLogged.value === false) {
+  if (userIsLogged.value === false) {
     alert('You need to login first')
 
-  }
-  else {
+  } else {
     if (newEventName.value === '') {
       newEventName.value = eventName.value;
     }
@@ -19,15 +19,15 @@ function saveSetupPanel() {
     console.log(userIsLogged.value)
     const dataToSave = {
       stepValue: stepValue.value,
+      maxValue: maxValue.value,
       eventName: eventName.value
+
     }
-   addItemFireStoreWithCustomId( dataToSave, 'users/' + userUid.value + '/setup', 'settings')
+    addItemFireStoreWithCustomId(dataToSave, 'users/' + userUid.value + '/setup', 'settings')
     newEventName.value = '';
     setupIsOpen.value = !setupIsOpen.value;
   }
 }
-
-
 
 
 </script>
@@ -56,16 +56,26 @@ function saveSetupPanel() {
                        v-model="stepValue"></ion-range>
           </div>
         </div>
-
+        <div class="setupSingleSetting">
+          <div class="stepsNameForCounts">Max Value:</div>
+          <div class="eventNamePickedValue">{{ maxValue }}</div>
+          <div class="eventNameWrapper">
+            <input type="number"
+                   v-model="maxValue"
+                   placeholder="max value"
+                   maxlength="5"
+            >
+          </div>
+        </div>
         <div class="setupSingleSetting">
           <div class="stepsNameForCounts">Event Name:</div>
           <div class="eventNamePickedValue">{{ eventName }}</div>
           <div class="eventNameWrapper">
-              <input type="text"
-                     v-model="newEventName"
-                     placeholder="Event Name"
-                     maxlength="10"
-              >
+            <input type="text"
+                   v-model="newEventName"
+                   placeholder="Event Name"
+                   maxlength="10"
+            >
           </div>
         </div>
         <div class="saveSetupButton">
@@ -90,25 +100,28 @@ function saveSetupPanel() {
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 }
+
 @keyframes setupSlideIn {
 
-  0%{
-  transform: translateX(100%);
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
-100%{
-  transform: translateX(0);
-}
-}
+
 @keyframes setupSlideOut {
 
-  0%{
+  0% {
     left: 0;
     transform: translateX(0);
   }
-  100%{
+  100% {
     transform: translateX(100%);
   }
 }
+
 .setupPanelWrapperClose {
   background-color: #eee4c6;
   left: 100%;
@@ -118,12 +131,13 @@ function saveSetupPanel() {
   z-index: 3;
   margin: 20px 0 0 20px;
   display: flex;
-  animation: setupSlideOut 0.35s ease-in ;
+  animation: setupSlideOut 0.35s ease-in;
   border: grey 1px solid;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 
 }
+
 .setupWrapper {
   display: flex;
   align-items: center;
@@ -132,15 +146,16 @@ function saveSetupPanel() {
   height: 100%;
 
 
-
 }
-.setupTitle{
+
+.setupTitle {
   font-size: 1.5rem;
   padding: 5px;
   width: 100%;
   text-align: center;
 
 }
+
 .setupSingleSetting {
   position: relative;
   display: flex;
@@ -154,6 +169,7 @@ function saveSetupPanel() {
   border-bottom: grey 1px solid;
   border-top: grey 1px solid;
 }
+
 .setupSingleSetting ion-range {
 
   margin: 0 5px;
@@ -168,22 +184,25 @@ function saveSetupPanel() {
   --pin-color: #fff;
 
 }
+
 .stepsRangeWrapper {
   position: absolute;
   display: flex;
 
   width: 45%;
   height: 100%;
-  left:40%;
+  left: 40%;
   top: -15px;
 
 
 }
+
 .stepsNameForCounts {
   font-size: 0.9rem;
   padding: 5px;
   width: fit-content;
 }
+
 .saveSetupButton {
   position: absolute;
   bottom: 0;
@@ -194,15 +213,18 @@ function saveSetupPanel() {
   cursor: pointer;
 
 }
+
 .eventNameWrapper {
- font-size: 0.7rem;
+  font-size: 0.7rem;
 
 }
+
 .eventNameWrapper input {
   width: 75px;
   padding: 5px;
 
 }
+
 .eventNamePickedValue {
   text-wrap: none;
   font-size: 0.9rem;

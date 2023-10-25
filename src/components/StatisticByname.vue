@@ -2,11 +2,28 @@
 import {computed} from "vue";
 import {jobList, nameToSearch} from "@/store";
 
+let singleNamesInJobList: string[] = [...new Set(jobList.value.map((item: any) => item.name))].sort();
 const nameToStatisticByLetters = computed( () => {
-   let singleNamesInJobList = [...new Set(jobList.value.map((item: any) => item.name))];
-   console.log('imina' + singleNamesInJobList);
-   let searchText = nameToSearch.value.toLowerCase();
-   return  singleNamesInJobList.filter(item => item.toLowerCase().includes(searchText));
+  try {
+
+    console.log('imina' + singleNamesInJobList);
+    let searchText: string = nameToSearch.value.toLowerCase();
+
+    let listOfNameToSearch = singleNamesInJobList.filter(item => item.toLowerCase().includes(searchText));
+    if (listOfNameToSearch.length === 0) {
+      return ['no event in database!']
+    } else {
+      return listOfNameToSearch
+    }
+  } catch (e: any) {
+    // console.log(e);
+    if (e instanceof Error) {
+      alert(`Error caught: ${e.message}`);
+    } else {
+      // Handle any other types of errors or re-throw
+      alert(`Error caught'`);
+    }
+  }
 
 })
 </script>
@@ -16,7 +33,6 @@ const nameToStatisticByLetters = computed( () => {
 <div class="nameToStatisticWrapper" v-for="item in nameToStatisticByLetters" @click="nameToSearch = item; $emit('searchName')">
  {{item}}
 </div>
-
 
 </template>
 
@@ -28,6 +44,7 @@ const nameToStatisticByLetters = computed( () => {
   border-radius: 5px;
   border: grey 1px solid;
   text-align: center;
+  text-wrap: nowrap;
 
 }
 </style>

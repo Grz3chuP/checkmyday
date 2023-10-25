@@ -4,7 +4,7 @@ import { IonButton, IonInput, IonItem, IonLabel, IonRange, IonIcon } from '@ioni
 import {cash, cashOutline} from "ionicons/icons";
 import {addJobItemToFireStore} from "@/firestore";
 import {getJobList, nameValue, userIsLogged, userUid} from "@/store";
-import {eventName, stepValue} from "@/setup";
+import {eventName, maxValue, stepValue} from "@/setup";
 
 const nameProps = defineProps(['nameUsed']);
 
@@ -78,7 +78,7 @@ const lastJobAdd = computed(() => {
                :ticks="true"
                :snaps="true"
                :min="0"
-               :max="100"
+               :max="maxValue"
 
                v-model="pay" > {{pay}}</ion-range>
     </ion-item>

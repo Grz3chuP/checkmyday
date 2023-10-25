@@ -1,6 +1,6 @@
 import {computed, ref} from "vue";
 import {checkUserIsLogin, getJobListFromFireStoreOrEmptyArray} from "@/firestore";
-import {eventName, setupList, stepValue} from "@/setup";
+import {eventName, maxValue, setupList, stepValue} from "@/setup";
 
 export let loginOpen = ref(false);
 export let signInOpen = ref(false);
@@ -8,9 +8,11 @@ export let userIsLogged = ref(false);
 
 export let resetPasswordOpen = ref(false);
 export const userUid = ref('');
+//imie ktore wyszukujemy
 export let nameValue = ref('');
 //imie do wyszukiwania w Statistic
 export let nameToSearch = ref('');
+
 export let todayPay = computed(() => {
 let sum = 0;
 const currentDay = new Date().getTime();
@@ -45,6 +47,7 @@ if(userIsLogged.value) {
     setupList.value = await getJobListFromFireStoreOrEmptyArray('users/' + userUid.value + '/setup', setupList.value);
     stepValue.value = setupList.value[0].stepValue;
     eventName.value = setupList.value[0].eventName;
+    maxValue.value = setupList.value[0].maxValue;
 }
 }
 

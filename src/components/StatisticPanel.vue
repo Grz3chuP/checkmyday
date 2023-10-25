@@ -114,13 +114,13 @@ async function clickSearchByName() {
 <template>
   <div class="namePickerWrapper">
     <input style="z-index: 10; max-width: 150px" type="text" v-model="nameToSearch" placeholder="Search by name">
-    <div style="position: relative">
-      <button class="searchByNameButton" @click="clickSearchByName()">
+<!--    <div style="position: relative">-->
+<!--      <button class="searchByNameButton" @click="clickSearchByName()">-->
 
 
-        Search by Name
-      </button>
-    </div>
+<!--        Search by Name-->
+<!--      </button>-->
+<!--    </div>-->
   </div>
   <div class="nameDisplayWrapper">
      <StatisticByname @searchName="clickSearchByName"/>
@@ -219,6 +219,7 @@ ion-datetime {
   display: flex;
   flex-wrap: nowrap;
   position: absolute;
+
   width: 100%;
   height: 30px;
   overflow-x: scroll;
